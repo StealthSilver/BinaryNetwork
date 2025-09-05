@@ -1,0 +1,4 @@
+BINARYNETWORK : this is a professional social media application like linked in
+
+FRONTEND : 
+BACKEND : nodejs, express, zod, mongodb
