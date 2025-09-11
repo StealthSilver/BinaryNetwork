@@ -12,4 +12,10 @@ app.use(express.json());
 
 const start = async () => {
   const connectDB = await mongoose.connect("mongodb://localhost:27017/");
+
+  app.listen(9090, () => {
+    console.log("server is running on port 9090");
+  });
 };
+
+start();
