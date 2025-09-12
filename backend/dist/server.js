@@ -17,15 +17,24 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const posts_route_1 = __importDefault(require("./routes/posts.route"));
+const user_routes_1 = __importDefault(require("./routes/user.routes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use(posts_route_1.default);
+app.use("/api/posts", posts_route_1.default);
+app.use("/api/users", user_routes_1.default);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
-    const connectDB = yield mongoose_1.default.connect("mongodb://localhost:27017/");
-    app.listen(9090, () => {
-        console.log("server is running on port 9090");
-    });
+    try {
+        yield mongoose_1.default.connect(process.env.MONGO_URI || "mongodb://localhost:27017/socialapp");
+        console.log(" MongoDB connected");
+        app.listen(9090, () => {
+            console.log("Server is running on http://localhost:9090");
+        });
+    }
+    catch (error) {
+        console.error("Database connection failed:", error);
+        process.exit(1);
+    }
 });
 start();

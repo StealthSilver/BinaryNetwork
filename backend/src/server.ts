@@ -11,15 +11,25 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(postRoutes);
-app.use(userRoutes);
+
+app.use("/api/posts", postRoutes);
+app.use("/api/users", userRoutes);
 
 const start = async () => {
-  const connectDB = await mongoose.connect("mongodb://localhost:27017/");
+  try {
+    await mongoose.connect(
+      process.env.MONGO_URI || "mongodb://localhost:27017/socialapp"
+    );
 
-  app.listen(9090, () => {
-    console.log("server is running on port 9090");
-  });
+    console.log(" MongoDB connected");
+
+    app.listen(9090, () => {
+      console.log("Server is running on http://localhost:9090");
+    });
+  } catch (error) {
+    console.error("Database connection failed:", error);
+    process.exit(1);
+  }
 };
 
 start();
