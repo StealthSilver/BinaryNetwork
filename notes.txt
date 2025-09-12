@@ -5,3 +5,5 @@ BACKEND : nodejs, express, zod, mongodb
 
 BACKEND SETUP 
 -----------------------------------------------------------------------
+
+db models -> controlled/ manipulated by controllers -> used by routers -> routes are served by server.ts
