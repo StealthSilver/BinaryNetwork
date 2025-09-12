@@ -4,6 +4,9 @@ export interface IPost extends Document {
   userId: mongoose.Types.ObjectId;
   body: string;
   likes: number;
+  media: string;
+  active: boolean;
+  fileType: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,7 +37,7 @@ const PostSchema: Schema = new Schema(
     },
     fileType: {
       type: String,
-      default: true,
+      default: "",
     },
   },
   { timestamps: true }
