@@ -7,3 +7,5 @@ BACKEND SETUP
 -----------------------------------------------------------------------
 
 db models -> controlled/ manipulated by controllers -> used by routers -> routes are served by server.ts
+
+then create the db models
