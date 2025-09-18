@@ -1,4 +1,4 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
@@ -7,12 +7,12 @@ export interface IUser extends Document {
   active: boolean;
   password: string;
   profilePicture: string;
-  token: string;
+  tokens: { token: string; createdAt: Date; expiresAt: Date }[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -45,10 +45,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "default.jpg",
     },
-    token: {
-      type: String,
-      default: "",
-    },
+    tokens: [
+      {
+        token: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
+        expiresAt: { type: Date, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );
