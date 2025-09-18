@@ -23,11 +23,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
+exports.convertUserDataToPDF = exports.downloadProfile = exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const profile_model_1 = require("../models/profile.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = __importDefault(require("crypto"));
+const pdfkit_1 = __importDefault(require("pdfkit"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password, username } = req.body;
@@ -194,3 +197,91 @@ const getAllUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getAllUserProfile = getAllUserProfile;
+const downloadProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user_id = req.query.id;
+        if (!user_id) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+        const userProfile = yield profile_model_1.Profile.findOne({ userId: user_id }).populate("userId", "name username email profilePicture");
+        if (!userProfile) {
+            return res.status(404).json({ message: "Profile not found" });
+        }
+        const filePath = yield (0, exports.convertUserDataToPDF)(userProfile);
+        return res.download(filePath, (err) => {
+            if (err) {
+                console.error("File download error:", err);
+                res.status(500).json({ message: "Could not download file" });
+            }
+            else {
+                fs_1.default.unlink(filePath, () => { });
+            }
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.downloadProfile = downloadProfile;
+const convertUserDataToPDF = (userData) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const doc = new pdfkit_1.default({ margin: 50 });
+            const outputPath = path_1.default.join("uploads", crypto_1.default.randomBytes(16).toString("hex") + ".pdf");
+            const stream = fs_1.default.createWriteStream(outputPath);
+            doc.pipe(stream);
+            // ---- Title ----
+            doc.fontSize(20).text("User Profile", { align: "center" }).moveDown(2);
+            // ---- Profile Picture ----
+            let profilePicPath = path_1.default.join("uploads", userData.userId.profilePicture || "default.jpg");
+            if (!fs_1.default.existsSync(profilePicPath)) {
+                // fallback if the file doesn't exist
+                profilePicPath = path_1.default.join("uploads", "default_user.png");
+            }
+            doc
+                .image(profilePicPath, { fit: [100, 100], align: "center" })
+                .moveDown(1);
+            // ---- Basic Info ----
+            doc.fontSize(14).text(`Name: ${userData.userId.name}`);
+            doc.text(`Username: ${userData.userId.username}`);
+            doc.text(`Email: ${userData.userId.email}`);
+            if (userData.bio)
+                doc.text(`Bio: ${userData.bio}`);
+            if (userData.currentPost)
+                doc.text(`Current Post: ${userData.currentPost}`);
+            if (userData.location)
+                doc.text(`Location: ${userData.location}`);
+            if (userData.website)
+                doc.text(`Website: ${userData.website}`);
+            doc.moveDown(1);
+            // ---- Past Work ----
+            if (userData.pastWork && userData.pastWork.length > 0) {
+                doc.fontSize(16).text("Past Work", { underline: true }).moveDown(0.5);
+                userData.pastWork.forEach((work, i) => {
+                    doc
+                        .fontSize(12)
+                        .text(`${i + 1}. ${work.company} - ${work.position} (${work.years})`, { indent: 20 });
+                });
+                doc.moveDown(1);
+            }
+            // ---- Education ----
+            if (userData.education && userData.education.length > 0) {
+                doc.fontSize(16).text("Education", { underline: true }).moveDown(0.5);
+                userData.education.forEach((edu, i) => {
+                    doc
+                        .fontSize(12)
+                        .text(`${i + 1}. ${edu.school} - ${edu.degree} in ${edu.fieldOfStudy}`, { indent: 20 });
+                });
+                doc.moveDown(1);
+            }
+            // ---- Finish PDF ----
+            doc.end();
+            stream.on("finish", () => resolve(outputPath));
+            stream.on("error", (err) => reject(err));
+        }
+        catch (err) {
+            reject(err);
+        }
+    });
+};
+exports.convertUserDataToPDF = convertUserDataToPDF;

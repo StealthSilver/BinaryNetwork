@@ -3,6 +3,9 @@ import User from "../models/user.model";
 import { Profile } from "../models/profile.model";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import PDFDocument from "pdfkit";
+import fs from "fs";
+import path from "path";
 
 export const register: RequestHandler = async (req, res) => {
   try {
@@ -206,5 +209,106 @@ export const getAllUserProfile: RequestHandler = async (req, res) => {
 };
 
 export const downloadProfile: RequestHandler = async (req, res) => {
-  const user_id = req.query.id;
+  try {
+    const user_id = req.query.id;
+
+    if (!user_id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const userProfile = await Profile.findOne({ userId: user_id }).populate(
+      "userId",
+      "name username email profilePicture"
+    );
+
+    if (!userProfile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    const filePath = await convertUserDataToPDF(userProfile);
+
+    return res.download(filePath, (err) => {
+      if (err) {
+        console.error("File download error:", err);
+        res.status(500).json({ message: "Could not download file" });
+      } else {
+        fs.unlink(filePath, () => {});
+      }
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const convertUserDataToPDF = (userData: any): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = new PDFDocument({ margin: 50 });
+      const outputPath = path.join(
+        "uploads",
+        crypto.randomBytes(16).toString("hex") + ".pdf"
+      );
+
+      const stream = fs.createWriteStream(outputPath);
+      doc.pipe(stream);
+
+      doc.fontSize(20).text("User Profile", { align: "center" }).moveDown(2);
+
+      let profilePicPath = path.join(
+        "uploads",
+        userData.userId.profilePicture || "default.jpg"
+      );
+
+      if (!fs.existsSync(profilePicPath)) {
+        profilePicPath = path.join("uploads", "default_user.png");
+      }
+
+      doc
+        .image(profilePicPath, { fit: [100, 100], align: "center" })
+        .moveDown(1);
+
+      doc.fontSize(14).text(`Name: ${userData.userId.name}`);
+      doc.text(`Username: ${userData.userId.username}`);
+      doc.text(`Email: ${userData.userId.email}`);
+      if (userData.bio) doc.text(`Bio: ${userData.bio}`);
+      if (userData.currentPost)
+        doc.text(`Current Post: ${userData.currentPost}`);
+      if (userData.location) doc.text(`Location: ${userData.location}`);
+      if (userData.website) doc.text(`Website: ${userData.website}`);
+      doc.moveDown(1);
+
+      if (userData.pastWork && userData.pastWork.length > 0) {
+        doc.fontSize(16).text("Past Work", { underline: true }).moveDown(0.5);
+        userData.pastWork.forEach((work: any, i: number) => {
+          doc
+            .fontSize(12)
+            .text(
+              `${i + 1}. ${work.company} - ${work.position} (${work.years})`,
+              { indent: 20 }
+            );
+        });
+        doc.moveDown(1);
+      }
+
+      if (userData.education && userData.education.length > 0) {
+        doc.fontSize(16).text("Education", { underline: true }).moveDown(0.5);
+        userData.education.forEach((edu: any, i: number) => {
+          doc
+            .fontSize(12)
+            .text(
+              `${i + 1}. ${edu.school} - ${edu.degree} in ${edu.fieldOfStudy}`,
+              { indent: 20 }
+            );
+        });
+        doc.moveDown(1);
+      }
+
+      doc.end();
+
+      stream.on("finish", () => resolve(outputPath));
+      stream.on("error", (err) => reject(err));
+    } catch (err) {
+      reject(err);
+    }
+  });
 };

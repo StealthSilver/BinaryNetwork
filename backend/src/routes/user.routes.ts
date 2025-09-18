@@ -7,6 +7,7 @@ import {
   getUserAndProfile,
   updateProfileData,
   getAllUserProfile,
+  downloadProfile,
 } from "../controllers/user.controller";
 import multer from "multer";
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -38,5 +39,6 @@ router.put("/user_update", authMiddleware, updateUserProfile);
 router.get("/get_user_and_profile", authMiddleware, getUserAndProfile);
 router.put("/update_profile", authMiddleware, updateProfileData);
 router.get("/all_profiles", authMiddleware, getAllUserProfile);
+router.get("/download_profile", authMiddleware, downloadProfile);
 
 export default router;

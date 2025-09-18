@@ -25,4 +25,5 @@ router.put("/user_update", auth_middleware_1.authMiddleware, user_controller_1.u
 router.get("/get_user_and_profile", auth_middleware_1.authMiddleware, user_controller_1.getUserAndProfile);
 router.put("/update_profile", auth_middleware_1.authMiddleware, user_controller_1.updateProfileData);
 router.get("/all_profiles", auth_middleware_1.authMiddleware, user_controller_1.getAllUserProfile);
+router.get("/download_profile", auth_middleware_1.authMiddleware, user_controller_1.downloadProfile);
 exports.default = router;
