@@ -23,8 +23,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertUserDataToPDF = exports.downloadProfile = exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
+exports.sendConnectionRequest = exports.convertUserDataToPDF = exports.downloadProfile = exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
+const connections_model_1 = require("../models/connections.model");
 const profile_model_1 = require("../models/profile.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = __importDefault(require("crypto"));
@@ -230,18 +231,14 @@ const convertUserDataToPDF = (userData) => {
             const outputPath = path_1.default.join("uploads", crypto_1.default.randomBytes(16).toString("hex") + ".pdf");
             const stream = fs_1.default.createWriteStream(outputPath);
             doc.pipe(stream);
-            // ---- Title ----
             doc.fontSize(20).text("User Profile", { align: "center" }).moveDown(2);
-            // ---- Profile Picture ----
             let profilePicPath = path_1.default.join("uploads", userData.userId.profilePicture || "default.jpg");
             if (!fs_1.default.existsSync(profilePicPath)) {
-                // fallback if the file doesn't exist
                 profilePicPath = path_1.default.join("uploads", "default_user.png");
             }
             doc
                 .image(profilePicPath, { fit: [100, 100], align: "center" })
                 .moveDown(1);
-            // ---- Basic Info ----
             doc.fontSize(14).text(`Name: ${userData.userId.name}`);
             doc.text(`Username: ${userData.userId.username}`);
             doc.text(`Email: ${userData.userId.email}`);
@@ -254,7 +251,6 @@ const convertUserDataToPDF = (userData) => {
             if (userData.website)
                 doc.text(`Website: ${userData.website}`);
             doc.moveDown(1);
-            // ---- Past Work ----
             if (userData.pastWork && userData.pastWork.length > 0) {
                 doc.fontSize(16).text("Past Work", { underline: true }).moveDown(0.5);
                 userData.pastWork.forEach((work, i) => {
@@ -264,7 +260,6 @@ const convertUserDataToPDF = (userData) => {
                 });
                 doc.moveDown(1);
             }
-            // ---- Education ----
             if (userData.education && userData.education.length > 0) {
                 doc.fontSize(16).text("Education", { underline: true }).moveDown(0.5);
                 userData.education.forEach((edu, i) => {
@@ -274,7 +269,6 @@ const convertUserDataToPDF = (userData) => {
                 });
                 doc.moveDown(1);
             }
-            // ---- Finish PDF ----
             doc.end();
             stream.on("finish", () => resolve(outputPath));
             stream.on("error", (err) => reject(err));
@@ -285,3 +279,47 @@ const convertUserDataToPDF = (userData) => {
     });
 };
 exports.convertUserDataToPDF = convertUserDataToPDF;
+const sendConnectionRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const { connectionId } = req.body;
+        if (!connectionId) {
+            return res
+                .status(400)
+                .json({ message: "Connection user ID is required" });
+        }
+        const connectionUser = yield user_model_1.default.findById(connectionId);
+        if (!connectionUser) {
+            return res.status(404).json({ message: "Connection user not found" });
+        }
+        if (String(user._id) === String(connectionId)) {
+            return res
+                .status(400)
+                .json({ message: "You cannot connect with yourself" });
+        }
+        const existingRequest = yield connections_model_1.Connection.findOne({
+            $or: [
+                { userId: user._id, connectionId },
+                { userId: connectionId, connectionId: user._id },
+            ],
+        });
+        if (existingRequest) {
+            return res
+                .status(400)
+                .json({ message: "Connection request already exists" });
+        }
+        const newConnection = new connections_model_1.Connection({
+            userId: user._id,
+            connectionId,
+            statusAccepted: null,
+        });
+        yield newConnection.save();
+        return res
+            .status(201)
+            .json({ message: "Connection request sent", connection: newConnection });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.sendConnectionRequest = sendConnectionRequest;
