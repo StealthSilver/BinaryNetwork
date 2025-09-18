@@ -6,6 +6,7 @@ import {
   updateUserProfile,
   getUserAndProfile,
   updateProfileData,
+  getAllUserProfile,
 } from "../controllers/user.controller";
 import multer from "multer";
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -36,5 +37,6 @@ router.post(
 router.put("/user_update", authMiddleware, updateUserProfile);
 router.get("/get_user_and_profile", authMiddleware, getUserAndProfile);
 router.put("/update_profile", authMiddleware, updateProfileData);
+router.get("/all_profiles", authMiddleware, getAllUserProfile);
 
 export default router;

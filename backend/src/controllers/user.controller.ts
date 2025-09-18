@@ -183,3 +183,24 @@ export const updateProfileData: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const getAllUserProfile: RequestHandler = async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate(
+      "userId",
+      "name username email profilePicture"
+    );
+
+    if (!profiles || profiles.length === 0) {
+      return res.status(404).json({ message: "No profiles found" });
+    }
+
+    return res.json({
+      message: "Profiles fetched successfully",
+      count: profiles.length,
+      profiles,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
