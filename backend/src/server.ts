@@ -18,7 +18,7 @@ app.use("/api/users", userRoutes);
 const start = async () => {
   try {
     await mongoose.connect(
-      process.env.MONGO_URI || "mongodb://localhost:27017/socialapp"
+      process.env.MONGO_URI || "mongodb://localhost:27017/BinaryNetwork"
     );
 
     console.log(" MongoDB connected");
