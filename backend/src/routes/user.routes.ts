@@ -40,5 +40,6 @@ router.get("/get_user_and_profile", authMiddleware, getUserAndProfile);
 router.put("/update_profile", authMiddleware, updateProfileData);
 router.get("/all_profiles", authMiddleware, getAllUserProfile);
 router.get("/download_profile", authMiddleware, downloadProfile);
+router.post("/user/send_connection_request");
 
 export default router;
