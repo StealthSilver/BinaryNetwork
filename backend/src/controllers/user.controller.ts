@@ -129,6 +129,11 @@ export const updateUserProfile: RequestHandler = async (req, res) => {
         return res.status(400).json({ message: "user already exists" });
       }
     }
+
+    Object.assign(user, newUserData);
+    await user.save();
+
+    return res.json({ message: "user updated" });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }

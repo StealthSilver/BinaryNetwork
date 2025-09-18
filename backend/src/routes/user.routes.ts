@@ -3,6 +3,7 @@ import {
   register,
   login,
   uploadProfilePicture,
+  updateUserProfile,
 } from "../controllers/user.controller";
 import multer from "multer";
 import { authMiddleware } from "../middleware/auth.middleware";
