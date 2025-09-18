@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import User from "../models/user.model";
+import { Connection } from "../models/connections.model";
 import { Profile } from "../models/profile.model";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
@@ -311,4 +312,55 @@ export const convertUserDataToPDF = (userData: any): Promise<string> => {
       reject(err);
     }
   });
+};
+
+export const sendConnectionRequest: RequestHandler = async (req, res) => {
+  try {
+    const user = (req as any).user;
+    const { connectionId } = req.body;
+
+    if (!connectionId) {
+      return res
+        .status(400)
+        .json({ message: "Connection user ID is required" });
+    }
+
+    const connectionUser = await User.findById(connectionId);
+    if (!connectionUser) {
+      return res.status(404).json({ message: "Connection user not found" });
+    }
+
+    if (String(user._id) === String(connectionId)) {
+      return res
+        .status(400)
+        .json({ message: "You cannot connect with yourself" });
+    }
+
+    const existingRequest = await Connection.findOne({
+      $or: [
+        { userId: user._id, connectionId },
+        { userId: connectionId, connectionId: user._id },
+      ],
+    });
+
+    if (existingRequest) {
+      return res
+        .status(400)
+        .json({ message: "Connection request already exists" });
+    }
+
+    const newConnection = new Connection({
+      userId: user._id,
+      connectionId,
+      statusAccepted: null,
+    });
+
+    await newConnection.save();
+
+    return res
+      .status(201)
+      .json({ message: "Connection request sent", connection: newConnection });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
 };
