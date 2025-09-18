@@ -26,7 +26,7 @@ app.use("/api/posts", posts_route_1.default);
 app.use("/api/users", user_routes_1.default);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect(process.env.MONGO_URI || "mongodb://localhost:27017/socialapp");
+        yield mongoose_1.default.connect(process.env.MONGO_URI || "mongodb://localhost:27017/BinaryNetwork");
         console.log(" MongoDB connected");
         app.listen(9090, () => {
             console.log("Server is running on http://localhost:9090");

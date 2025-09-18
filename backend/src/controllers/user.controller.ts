@@ -48,3 +48,41 @@ export const register: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const login: RequestHandler = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+    user.tokens.push({ token, createdAt: new Date(), expiresAt });
+    await user.save();
+
+    const { password: _, tokens, ...userData } = user.toObject();
+
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+      user: userData,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
