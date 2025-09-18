@@ -4,6 +4,7 @@ import {
   login,
   uploadProfilePicture,
   updateUserProfile,
+  getUserAndProfile,
 } from "../controllers/user.controller";
 import multer from "multer";
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -19,17 +20,19 @@ const storage = multer.diskStorage({
     cb(null, uniqueSuffix + "-" + file.originalname);
   },
 });
-
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 router.post("/register", register);
 router.post("/login", login);
+
 router.post(
   "/update_profile_picture",
   authMiddleware,
   upload.single("profile_picture"),
   uploadProfilePicture
 );
-router.post("/user_update", updateUserProfile);
+
+router.put("/user_update", authMiddleware, updateUserProfile);
+router.get("/get_user_and_profile", authMiddleware, getUserAndProfile);
 
 export default router;

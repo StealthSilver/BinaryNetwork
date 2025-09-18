@@ -113,27 +113,45 @@ export const uploadProfilePicture: RequestHandler = async (req, res) => {
 
 export const updateUserProfile: RequestHandler = async (req, res) => {
   try {
-    const { token, ...newUserData } = req.body;
-    const user = await User.findOne({ token: token });
+    const user = (req as any).user;
+    const { username, email, ...restData } = req.body;
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (username || email) {
+      const existingUser = await User.findOne({
+        $or: [{ username }, { email }],
+        _id: { $ne: user._id },
+      });
 
-    const { username, email } = newUserData;
-
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-
-    if (existingUser) {
-      if (existingUser || String(existingUser._id) !== String(user._id)) {
-        return res.status(400).json({ message: "user already exists" });
+      if (existingUser) {
+        return res
+          .status(400)
+          .json({ message: "Username or email already exists" });
       }
     }
 
-    Object.assign(user, newUserData);
+    Object.assign(user, { username, email, ...restData });
     await user.save();
 
-    return res.json({ message: "user updated" });
+    return res.json({ message: "User updated", user });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUserAndProfile: RequestHandler = async (req, res) => {
+  try {
+    const user = (req as any).user;
+
+    const userProfile = await Profile.findOne({ userId: user._id }).populate(
+      "userId",
+      "name email username profilePicture"
+    );
+
+    if (!userProfile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    return res.json({ user, profile: userProfile });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
