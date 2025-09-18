@@ -29,5 +29,6 @@ router.post(
   upload.single("profile_picture"),
   uploadProfilePicture
 );
+router.post("/user_update", updateUserProfile);
 
 export default router;
