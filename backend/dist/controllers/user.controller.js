@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendConnectionRequest = exports.convertUserDataToPDF = exports.downloadProfile = exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
+exports.myConnections = exports.getMyConnectionRequests = exports.sendConnectionRequest = exports.convertUserDataToPDF = exports.downloadProfile = exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const connections_model_1 = require("../models/connections.model");
 const profile_model_1 = require("../models/profile.model");
@@ -323,3 +323,39 @@ const sendConnectionRequest = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.sendConnectionRequest = sendConnectionRequest;
+const getMyConnectionRequests = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        const sentConnections = yield connections_model_1.Connection.find({ userId: user._id })
+            .populate("connectionId", "name username email profilePicture")
+            .sort({ createdAt: -1 });
+        return res.json({
+            message: "Sent connection requests fetched successfully",
+            count: sentConnections.length,
+            sentConnections,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.getMyConnectionRequests = getMyConnectionRequests;
+const myConnections = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token } = req.body;
+    try {
+        const user = yield user_model_1.default.findOne({ token });
+        if (!user) {
+            return res.status(404).json({ messgae: "User not found" });
+        }
+        const connections = yield exports.sendConnectionRequest.find({
+            connectionId: user._id,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.myConnections = myConnections;

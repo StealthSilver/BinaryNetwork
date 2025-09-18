@@ -10,6 +10,7 @@ import {
   downloadProfile,
   sendConnectionRequest,
   getMyConnectionRequests,
+  myConnections,
 } from "../controllers/user.controller";
 import multer from "multer";
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -44,5 +45,6 @@ router.get("/all_profiles", authMiddleware, getAllUserProfile);
 router.get("/download_profile", authMiddleware, downloadProfile);
 router.post("/connect", authMiddleware, sendConnectionRequest);
 router.get("/my_sent_connections", authMiddleware, getMyConnectionRequests);
+router.get("/my_received_connections", authMiddleware, myConnections);
 
 export default router;

@@ -386,3 +386,27 @@ export const getMyConnectionRequests: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const myConnections: RequestHandler = async (req, res) => {
+  try {
+    const user = (req as any).user;
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const receivedConnections = await Connection.find({
+      connectionId: user._id,
+    })
+      .populate("userId", "name username email profilePicture")
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      message: "Received connection requests fetched successfully",
+      count: receivedConnections.length,
+      receivedConnections,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
