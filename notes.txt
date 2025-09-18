@@ -8,3 +8,63 @@ BACKEND SETUP
 
 db models -> controlled/ manipulated by controllers -> used by routers -> routes are served by server.ts
 
+1. npm init -y
+2. tsc --init 
+3. change the outDir and the rootDir and download the dependencies :
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "mongoose": "^8.18.0",
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.10",
+    "pdf-creator-node": "^2.3.5",
+    "pdfkit": "^0.17.2"
+
+4. create the src/server.ts 
+5. write the express boilerplate
+6. connect mongo and schek if working 
+7. create four folders models , routes , controllers , middleware in src 
+8. create the data models and schemas for users, profile, posts, connections, comments 
+9. export all teh models and create the user.route.ts and posts.route.ts 
+10. create the router in server.ts and define the endpoints 
+11. in the user routes create the register and login route 
+
+/register will be used to create a new user.
+/login will be used to authenticate a user and return a token.
+In the user.controller.ts, write the logic for both routes.
+Import the User model and any required libraries (bcrypt for hashing, crypto for tokens, etc.).
+Define separate functions: one for register, one for login.
+
+For the register logic:
+Validate the input (check if name, email, username, and password are provided).
+Check if a user with the same email already exists.
+Hash the password before saving.
+Create a new user record and save it to the database.
+Create a profile for the new user.
+Generate a secure token and store it in the user’s tokens array with an expiry date.
+Return a success message, the token, and the user data (excluding the password).
+For the login logic:
+Validate the input (check if email and password are provided).
+Find the user by email in the database.
+Compare the provided password with the hashed password stored in the database.
+If valid, generate a new token and push it into the user’s tokens array with an expiry date.
+Return a success message, the token, and the user data (excluding the password).
+If invalid, return an error message (invalid credentials).
+
+Create an auth.middleware.ts file inside a middleware folder.
+This middleware will run before protected routes to verify that the user is authenticated.
+In the auth middleware:
+Extract the token from the Authorization header (usually Bearer <token>).
+If no token is provided, return an error response (401 Unauthorized).
+Look up the user in the database by matching the token in the tokens array.
+Also check that the token has not expired.
+If valid, attach the user object to the req object so downstream routes can use it.
+If invalid or expired, return an error response (401 Unauthorized).
+Export the middleware so it can be reused.
+In your route files (like posts.routes.ts or user.routes.ts), import the middleware and apply it to routes that require authentication.
+For example, allow register and login to be public, but protect routes like updateProfile, createPost, likePost, or commentOnPost.
+Test the middleware by making a request with and without a token in Postman.
+Without a token → should return 401 Unauthorized.
+With a valid token → should allow access and return the expected response.
