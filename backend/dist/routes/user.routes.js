@@ -24,4 +24,5 @@ router.post("/update_profile_picture", auth_middleware_1.authMiddleware, upload.
 router.put("/user_update", auth_middleware_1.authMiddleware, user_controller_1.updateUserProfile);
 router.get("/get_user_and_profile", auth_middleware_1.authMiddleware, user_controller_1.getUserAndProfile);
 router.put("/update_profile", auth_middleware_1.authMiddleware, user_controller_1.updateProfileData);
+router.get("/all_profiles", auth_middleware_1.authMiddleware, user_controller_1.getAllUserProfile);
 exports.default = router;

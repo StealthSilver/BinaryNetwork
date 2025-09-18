@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
+exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const profile_model_1 = require("../models/profile.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -177,3 +177,20 @@ const updateProfileData = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.updateProfileData = updateProfileData;
+const getAllUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const profiles = yield profile_model_1.Profile.find().populate("userId", "name username email profilePicture");
+        if (!profiles || profiles.length === 0) {
+            return res.status(404).json({ message: "No profiles found" });
+        }
+        return res.json({
+            message: "Profiles fetched successfully",
+            count: profiles.length,
+            profiles,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.getAllUserProfile = getAllUserProfile;

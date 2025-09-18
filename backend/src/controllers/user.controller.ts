@@ -204,3 +204,7 @@ export const getAllUserProfile: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const downloadProfile: RequestHandler = async (req, res) => {
+  const user_id = req.query.id;
+};
