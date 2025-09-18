@@ -17,8 +17,11 @@ const storage = multer_1.default.diskStorage({
         cb(null, uniqueSuffix + "-" + file.originalname);
     },
 });
-const upload = (0, multer_1.default)({ storage: storage });
+const upload = (0, multer_1.default)({ storage });
 router.post("/register", user_controller_1.register);
 router.post("/login", user_controller_1.login);
 router.post("/update_profile_picture", auth_middleware_1.authMiddleware, upload.single("profile_picture"), user_controller_1.uploadProfilePicture);
+router.put("/user_update", auth_middleware_1.authMiddleware, user_controller_1.updateUserProfile);
+router.get("/get_user_and_profile", auth_middleware_1.authMiddleware, user_controller_1.getUserAndProfile);
+router.put("/update_profile", auth_middleware_1.authMiddleware, user_controller_1.updateProfileData);
 exports.default = router;

@@ -156,3 +156,30 @@ export const getUserAndProfile: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const updateProfileData: RequestHandler = async (req, res) => {
+  try {
+    const user = (req as any).user;
+    const newProfileData = req.body;
+
+    let profile = await Profile.findOne({ userId: user._id });
+
+    if (!profile) {
+      profile = new Profile({
+        userId: user._id,
+        ...newProfileData,
+      });
+    } else {
+      Object.assign(profile, newProfileData);
+    }
+
+    await profile.save();
+
+    return res.json({
+      message: "Profile updated successfully",
+      profile,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};

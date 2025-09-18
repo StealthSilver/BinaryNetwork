@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadProfilePicture = exports.login = exports.register = void 0;
+exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const profile_model_1 = require("../models/profile.model");
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -117,3 +117,63 @@ const uploadProfilePicture = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.uploadProfilePicture = uploadProfilePicture;
+const updateUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const _a = req.body, { username, email } = _a, restData = __rest(_a, ["username", "email"]);
+        if (username || email) {
+            const existingUser = yield user_model_1.default.findOne({
+                $or: [{ username }, { email }],
+                _id: { $ne: user._id },
+            });
+            if (existingUser) {
+                return res
+                    .status(400)
+                    .json({ message: "Username or email already exists" });
+            }
+        }
+        Object.assign(user, Object.assign({ username, email }, restData));
+        yield user.save();
+        return res.json({ message: "User updated", user });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.updateUserProfile = updateUserProfile;
+const getUserAndProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const userProfile = yield profile_model_1.Profile.findOne({ userId: user._id }).populate("userId", "name email username profilePicture");
+        if (!userProfile) {
+            return res.status(404).json({ message: "Profile not found" });
+        }
+        return res.json({ user, profile: userProfile });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.getUserAndProfile = getUserAndProfile;
+const updateProfileData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const newProfileData = req.body;
+        let profile = yield profile_model_1.Profile.findOne({ userId: user._id });
+        if (!profile) {
+            profile = new profile_model_1.Profile(Object.assign({ userId: user._id }, newProfileData));
+        }
+        else {
+            Object.assign(profile, newProfileData);
+        }
+        yield profile.save();
+        return res.json({
+            message: "Profile updated successfully",
+            profile,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.updateProfileData = updateProfileData;
