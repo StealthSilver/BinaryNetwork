@@ -86,3 +86,30 @@ export const login: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const uploadProfilePicture: RequestHandler = async (req, res) => {
+  try {
+    // Multer should have attached the file
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    // Auth middleware should attach user to req
+    const user = (req as any).user;
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Update profile picture field
+    user.profilePicture = req.file.filename;
+    await user.save();
+
+    return res.json({
+      message: "Profile picture updated",
+      profilePicture: user.profilePicture,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
