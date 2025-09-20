@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { Post } from "../models/posts.model";
+import { Comment } from "../models/comments.model";
 
 export const createPost: RequestHandler = async (req, res) => {
   try {
@@ -90,6 +91,41 @@ export const deletePost: RequestHandler = async (req, res) => {
     await Post.findByIdAndDelete(post_id);
 
     return res.json({ message: "Post deleted successfully" });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const commentPost: RequestHandler = async (req, res) => {
+  try {
+    const user = (req as any).user; // from authMiddleware
+    const { postId, body } = req.body;
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!postId || !body) {
+      return res.status(400).json({ message: "postId and body are required" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const newComment = new Comment({
+      userId: user._id,
+      postId,
+      body,
+    });
+
+    await newComment.save();
+
+    return res.status(201).json({
+      message: "Comment added successfully",
+      comment: newComment,
+    });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
