@@ -412,13 +412,40 @@ export const myConnections: RequestHandler = async (req, res) => {
 };
 
 export const acceptConnectionRequest: RequestHandler = async (req, res) => {
-  const { token, requestId, action_type } = req.body;
-
   try {
-    const user = await sendConnectionRequest.findOne({ _id: requestId });
+    const user = (req as any).user;
+    const { requestId, action_type } = req.body;
+
     if (!user) {
-      return res.status(404);
+      return res.status(401).json({ message: "Unauthorized" });
     }
+
+    const connection = await Connection.findById(requestId);
+
+    if (!connection) {
+      return res.status(404).json({ message: "Connection not found" });
+    }
+
+    if (String(connection.connectionId) !== String(user._id)) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to update this request" });
+    }
+
+    if (action_type === "accept") {
+      connection.statusAccepted = true;
+    } else if (action_type === "reject") {
+      connection.statusAccepted = false;
+    } else {
+      return res.status(400).json({ message: "Invalid action type" });
+    }
+
+    await connection.save();
+
+    return res.json({
+      message: `Connection request ${action_type}ed successfully`,
+      connection,
+    });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
