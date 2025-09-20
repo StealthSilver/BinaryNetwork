@@ -344,14 +344,20 @@ const getMyConnectionRequests = (req, res) => __awaiter(void 0, void 0, void 0, 
 });
 exports.getMyConnectionRequests = getMyConnectionRequests;
 const myConnections = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { token } = req.body;
     try {
-        const user = yield user_model_1.default.findOne({ token });
+        const user = req.user;
         if (!user) {
-            return res.status(404).json({ messgae: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
-        const connections = yield exports.sendConnectionRequest.find({
+        const receivedConnections = yield connections_model_1.Connection.find({
             connectionId: user._id,
+        })
+            .populate("userId", "name username email profilePicture")
+            .sort({ createdAt: -1 });
+        return res.json({
+            message: "Received connection requests fetched successfully",
+            count: receivedConnections.length,
+            receivedConnections,
         });
     }
     catch (error) {

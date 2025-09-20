@@ -410,3 +410,16 @@ export const myConnections: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const acceptConnectionRequest: RequestHandler = async (req, res) => {
+  const { token, requestId, action_type } = req.body;
+
+  try {
+    const user = await sendConnectionRequest.findOne({ _id: requestId });
+    if (!user) {
+      return res.status(404);
+    }
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
