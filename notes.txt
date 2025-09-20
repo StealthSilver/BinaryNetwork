@@ -179,3 +179,7 @@ FRONTED
 
 -> check the bundle size of react bundels on bundlePhobia
 
+1. npm create vite@latest 
+2. react -> ts 
+3. npm i react-redux
+4. npm run dev
