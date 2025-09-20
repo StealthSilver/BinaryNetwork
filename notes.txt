@@ -184,3 +184,9 @@ FRONTED
 3. npm i react-redux , npm i @reduxjs/toolkit
 4. npm run dev
 5. create 3 folders config, styles, pages
+
+
+create the base server config for the client side in the config/index.tsx 
+
+create three folders inside config/redux -> actions, reducer , middleware
+
