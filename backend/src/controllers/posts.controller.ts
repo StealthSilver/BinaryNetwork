@@ -98,7 +98,7 @@ export const deletePost: RequestHandler = async (req, res) => {
 
 export const commentPost: RequestHandler = async (req, res) => {
   try {
-    const user = (req as any).user; // from authMiddleware
+    const user = (req as any).user;
     const { postId, body } = req.body;
 
     if (!user) {
