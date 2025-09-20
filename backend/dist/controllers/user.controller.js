@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.myConnections = exports.getMyConnectionRequests = exports.sendConnectionRequest = exports.convertUserDataToPDF = exports.downloadProfile = exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
+exports.acceptConnectionRequest = exports.myConnections = exports.getMyConnectionRequests = exports.sendConnectionRequest = exports.convertUserDataToPDF = exports.downloadProfile = exports.getAllUserProfile = exports.updateProfileData = exports.getUserAndProfile = exports.updateUserProfile = exports.uploadProfilePicture = exports.login = exports.register = void 0;
 const user_model_1 = __importDefault(require("../models/user.model"));
 const connections_model_1 = require("../models/connections.model");
 const profile_model_1 = require("../models/profile.model");
@@ -365,3 +365,39 @@ const myConnections = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.myConnections = myConnections;
+const acceptConnectionRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const { requestId, action_type } = req.body;
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const connection = yield connections_model_1.Connection.findById(requestId);
+        if (!connection) {
+            return res.status(404).json({ message: "Connection not found" });
+        }
+        if (String(connection.connectionId) !== String(user._id)) {
+            return res
+                .status(403)
+                .json({ message: "You are not authorized to update this request" });
+        }
+        if (action_type === "accept") {
+            connection.statusAccepted = true;
+        }
+        else if (action_type === "reject") {
+            connection.statusAccepted = false;
+        }
+        else {
+            return res.status(400).json({ message: "Invalid action type" });
+        }
+        yield connection.save();
+        return res.json({
+            message: `Connection request ${action_type}ed successfully`,
+            connection,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.acceptConnectionRequest = acceptConnectionRequest;

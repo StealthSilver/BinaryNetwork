@@ -63,3 +63,34 @@ export const getMyPosts: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const deletePost: RequestHandler = async (req, res) => {
+  try {
+    const user = (req as any).user;
+    const { post_id } = req.body;
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!post_id) {
+      return res.status(400).json({ message: "Post ID is required" });
+    }
+
+    const post = await Post.findById(post_id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (String(post.userId) !== String(user._id)) {
+      return res.status(403).json({ message: "You cannot delete this post" });
+    }
+
+    await Post.findByIdAndDelete(post_id);
+
+    return res.json({ message: "Post deleted successfully" });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};

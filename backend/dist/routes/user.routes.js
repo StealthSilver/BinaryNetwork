@@ -29,4 +29,5 @@ router.get("/download_profile", auth_middleware_1.authMiddleware, user_controlle
 router.post("/connect", auth_middleware_1.authMiddleware, user_controller_1.sendConnectionRequest);
 router.get("/my_sent_connections", auth_middleware_1.authMiddleware, user_controller_1.getMyConnectionRequests);
 router.get("/my_received_connections", auth_middleware_1.authMiddleware, user_controller_1.myConnections);
+router.post("/accept_connection_request", auth_middleware_1.authMiddleware, user_controller_1.acceptConnectionRequest);
 exports.default = router;

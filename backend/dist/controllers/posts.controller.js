@@ -9,8 +9,60 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.activeCheck = void 0;
-const activeCheck = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.status(200).json({ message: "RUNNING" });
+exports.getMyPosts = exports.getAllPosts = exports.createPost = void 0;
+const posts_model_1 = require("../models/posts.model");
+const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const { body } = req.body;
+        if (!body) {
+            return res.status(400).json({ message: "Post body is required" });
+        }
+        const media = req.file ? req.file.filename : "";
+        const fileType = req.file ? req.file.mimetype : "";
+        const newPost = new posts_model_1.Post({
+            userId: user._id,
+            body,
+            media,
+            fileType,
+        });
+        yield newPost.save();
+        return res.status(201).json({
+            message: "Post created successfully",
+            post: newPost,
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 });
-exports.activeCheck = activeCheck;
+exports.createPost = createPost;
+const getAllPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const posts = yield posts_model_1.Post.find()
+            .populate("userId", "name username profilePicture")
+            .sort({ createdAt: -1 });
+        return res.json({ posts });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.getAllPosts = getAllPosts;
+const getMyPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        if (!user) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const posts = yield posts_model_1.Post.find({ userId: user._id }).sort({ createdAt: -1 });
+        return res.json({ posts });
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+exports.getMyPosts = getMyPosts;

@@ -5,6 +5,7 @@ import {
   createPost,
   getAllPosts,
   getMyPosts,
+  deletePost,
 } from "../controllers/posts.controller";
 
 const router = Router();
@@ -25,5 +26,5 @@ const upload = multer({ storage: storage });
 router.post("/create", authMiddleware, upload.single("media"), createPost);
 router.get("/all", authMiddleware, getAllPosts);
 router.get("/my_posts", authMiddleware, getMyPosts);
-
+router.delete("/delete", authMiddleware, deletePost);
 export default router;
