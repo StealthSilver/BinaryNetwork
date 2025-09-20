@@ -186,3 +186,30 @@ export const deleteCommentOfUser: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const incrementLikes: RequestHandler = async (req, res) => {
+  try {
+    const { postId } = req.body;
+
+    if (!postId) {
+      return res.status(400).json({ message: "postId is required" });
+    }
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    post.likes = (post.likes || 0) + 1;
+    await post.save();
+
+    return res.json({
+      message: "Like added successfully",
+      likes: post.likes,
+      postId: post._id,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};

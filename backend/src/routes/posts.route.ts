@@ -9,6 +9,7 @@ import {
   commentPost,
   getCommentsByPost,
   deleteCommentOfUser,
+  incrementLikes,
 } from "../controllers/posts.controller";
 
 const router = Router();
@@ -33,5 +34,6 @@ router.delete("/delete", authMiddleware, deletePost);
 router.post("/comment", authMiddleware, commentPost);
 router.get("/:postId/comments", authMiddleware, getCommentsByPost);
 router.delete("/delete_comment", authMiddleware, deleteCommentOfUser);
+router.post("/like_post", authMiddleware, incrementLikes);
 
 export default router;
