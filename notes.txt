@@ -183,3 +183,4 @@ FRONTED
 2. react -> ts 
 3. npm i react-redux , npm i @reduxjs/toolkit
 4. npm run dev
+5. create 3 folders config, styles, pages
