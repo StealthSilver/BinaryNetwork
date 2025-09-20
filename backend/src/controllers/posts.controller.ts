@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
+import Profile from "../models/profile.model";
+import User from "../models/user.model";
 
-export const activeCheck: RequestHandler = async (req, res) => {
-  return res.status(200).json({ message: "RUNNING" });
-};
+
+import bcrypt from bcrypt
