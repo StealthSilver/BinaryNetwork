@@ -1,5 +1,11 @@
 import { Router } from "express";
 import multer from "multer";
+import { authMiddleware } from "../middleware/auth.middleware";
+import {
+  createPost,
+  getAllPosts,
+  getMyPosts,
+} from "../controllers/posts.controller";
 
 const router = Router();
 
@@ -9,10 +15,18 @@ const storage = multer.diskStorage({
   },
 
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
+
+/**
+ * Routes
+ */
+router.post("/create", authMiddleware, upload.single("media"), createPost);
+router.get("/all", authMiddleware, getAllPosts);
+router.get("/my_posts", authMiddleware, getMyPosts);
 
 export default router;
