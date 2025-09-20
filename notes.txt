@@ -189,4 +189,10 @@ FRONTED
 create the base server config for the client side in the config/index.tsx 
 
 create three folders inside config/redux -> actions, reducer , middleware
+also create store.ts in redux
 
+STEPS FOR STATE MANAGEMENT USING REDUX 
+
+1. submit actions
+2. handle action in it's reducer 
+3. register it in the store
