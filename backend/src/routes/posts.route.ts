@@ -22,9 +22,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-/**
- * Routes
- */
 router.post("/create", authMiddleware, upload.single("media"), createPost);
 router.get("/all", authMiddleware, getAllPosts);
 router.get("/my_posts", authMiddleware, getMyPosts);

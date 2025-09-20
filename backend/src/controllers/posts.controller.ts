@@ -1,12 +1,9 @@
 import { RequestHandler } from "express";
 import { Post } from "../models/posts.model";
-import User from "../models/user.model";
-
-import bcrypt from "bcrypt";
 
 export const createPost: RequestHandler = async (req, res) => {
   try {
-    const user = (req as any).user; // comes from authMiddleware
+    const user = (req as any).user;
 
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -39,9 +36,6 @@ export const createPost: RequestHandler = async (req, res) => {
   }
 };
 
-/**
- * Get all posts (with user info populated)
- */
 export const getAllPosts: RequestHandler = async (req, res) => {
   try {
     const posts = await Post.find()
@@ -54,9 +48,6 @@ export const getAllPosts: RequestHandler = async (req, res) => {
   }
 };
 
-/**
- * Get posts by logged-in user
- */
 export const getMyPosts: RequestHandler = async (req, res) => {
   try {
     const user = (req as any).user;
