@@ -7,6 +7,8 @@ import {
   getMyPosts,
   deletePost,
   commentPost,
+  getCommentsByPost,
+  deleteCommentOfUser,
 } from "../controllers/posts.controller";
 
 const router = Router();
@@ -29,5 +31,7 @@ router.get("/all", authMiddleware, getAllPosts);
 router.get("/my_posts", authMiddleware, getMyPosts);
 router.delete("/delete", authMiddleware, deletePost);
 router.post("/comment", authMiddleware, commentPost);
+router.get("/:postId/comments", authMiddleware, getCommentsByPost);
+router.delete("/delete_comment", authMiddleware, deleteCommentOfUser);
 
 export default router;

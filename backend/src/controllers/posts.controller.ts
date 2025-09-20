@@ -130,3 +130,59 @@ export const commentPost: RequestHandler = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const getCommentsByPost: RequestHandler = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    if (!postId) {
+      return res.status(400).json({ message: "postId is required" });
+    }
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const comments = await Comment.find({ postId })
+      .populate("userId", "name username profilePicture")
+      .sort({ createdAt: -1 });
+
+    return res.json({ comments });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteCommentOfUser: RequestHandler = async (req, res) => {
+  try {
+    const user = (req as any).user;
+    const { commentId } = req.body;
+
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (!commentId) {
+      return res.status(400).json({ message: "commentId is required" });
+    }
+
+    const comment = await Comment.findById(commentId);
+
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    if (String(comment.userId) !== String(user._id)) {
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to delete this comment" });
+    }
+
+    await Comment.findByIdAndDelete(commentId);
+
+    return res.json({ message: "Comment deleted successfully" });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};

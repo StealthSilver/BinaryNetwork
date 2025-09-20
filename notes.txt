@@ -68,3 +68,5 @@ For example, allow register and login to be public, but protect routes like upda
 Test the middleware by making a request with and without a token in Postman.
 Without a token → should return 401 Unauthorized.
 With a valid token → should allow access and return the expected response.
+
+
