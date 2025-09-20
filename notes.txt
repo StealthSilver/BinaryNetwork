@@ -69,4 +69,113 @@ Test the middleware by making a request with and without a token in Postman.
 Without a token → should return 401 Unauthorized.
 With a valid token → should allow access and return the expected response.
 
+🧑‍💻 User Routes
+1. Register User (Public)
+Endpoint: POST /api/users/register
+
+Body (JSON):
+
+{
+  "name": "John Doe",
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "123456"
+}
+
+
+2. Login User (Public)
+Endpoint: POST /api/users/login
+Body (JSON):
+
+{
+  "email": "john@example.com",
+  "password": "123456"
+}
+
+
+3. Update Profile Picture (Protected)
+Endpoint: POST /api/users/update_profile_picture
+
+
+4. Update User Profile (Protected)
+Endpoint: POST /api/users/user_update
+Body (JSON):
+
+{
+  "username": "newjohndoe",
+  "email": "newjohn@example.com"
+}
+
+
+5. Get User + Profile (Protected)
+Endpoint: GET /api/users/get_user_and_profile
+
+
+
+6. Update Profile Data (Protected)
+Endpoint: POST /api/users/update_profile
+
+Body (JSON):
+
+{
+  "bio": "Full Stack Developer",
+  "currentPost": "Software Engineer",
+  "pastWork": [
+    { "company": "Google", "position": "Intern", "years": "2020-2021" }
+  ],
+  "education": [
+    { "school": "MIT", "degree": "BS", "fieldOfStudy": "CS" }
+  ]
+}
+
+
+7. Get All Profiles (Public)
+Endpoint: GET /api/users/all_profiles
+
+
+8. Download Profile as PDF (Protected)
+Endpoint: GET /api/users/download_profile?id=<USER_ID>
+
+
+🔗 Connection Routes
+9. Send Connection Request (Protected)
+Endpoint: POST /api/users/send_connection
+
+10. Get My Sent Requests (Protected)
+Endpoint: GET /api/users/my_requests
+
+11. Get My Incoming Requests (Protected)
+Endpoint: GET /api/users/my_connections
+
+12. Accept/Reject Connection (Protected)
+Endpoint: POST /api/users/accept_connection
+
+
+📝 Post Routes
+13. Create Post (Protected)
+Endpoint: POST /api/posts/create
+
+14. Delete Post (Protected)
+Endpoint: DELETE /api/posts/delete
+
+15. Like Post (Protected)
+Endpoint: POST /api/posts/like_post
+
+Expected: Likes count incremented
+
+💬 Comment Routes
+16. Comment on Post (Protected)
+Endpoint: POST /api/comments/add
+
+
+17. Get Comments for Post (Public)
+Endpoint: GET /api/comments/post/:postId
+
+18. Delete Comment (Protected)
+Endpoint: DELETE /api/comments/delete
+
+
+FRONTED 
+
+-> check the bundle size of react bundels on bundlePhobia
 
