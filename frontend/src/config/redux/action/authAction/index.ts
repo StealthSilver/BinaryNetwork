@@ -16,9 +16,9 @@ interface LoginResponse {
 }
 
 export const loginUser = createAsyncThunk<
-  LoginResponse, // Return type of fulfilled
-  LoginPayload, // Argument type
-  { rejectValue: { message: string } } // reject type
+  LoginResponse,
+  LoginPayload,
+  { rejectValue: { message: string } }
 >("user/login", async (user: LoginPayload, thunkAPI) => {
   try {
     const response = await clientServer.post<LoginResponse>("/login", {
@@ -26,14 +26,13 @@ export const loginUser = createAsyncThunk<
       password: user.password,
     });
 
-    // Now TypeScript knows response.data has type LoginResponse
     if (response.data.token) {
       localStorage.setItem("token", response.data.token);
     } else {
       return thunkAPI.rejectWithValue({ message: "Token not provided" });
     }
 
-    return response.data; // TypeScript knows this is LoginResponse
+    return response.data;
   } catch (error: any) {
     const errMsg = error?.response?.data || { message: "Something went wrong" };
     return thunkAPI.rejectWithValue(errMsg);
