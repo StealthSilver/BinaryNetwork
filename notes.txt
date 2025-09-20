@@ -181,5 +181,5 @@ FRONTED
 
 1. npm create vite@latest 
 2. react -> ts 
-3. npm i react-redux
+3. npm i react-redux , npm i @reduxjs/toolkit
 4. npm run dev
