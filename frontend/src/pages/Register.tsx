@@ -12,7 +12,7 @@ export default function Register() {
 
   const [form, setForm] = useState({
     name: "",
-    username: "", // ✅ added field
+    username: "",
     email: "",
     password: "",
   });
@@ -29,7 +29,6 @@ export default function Register() {
           Create your account
         </h2>
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-          {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Name
@@ -44,7 +43,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Username */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Username
@@ -59,7 +57,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -74,7 +71,6 @@ export default function Register() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Password
