@@ -30,7 +30,7 @@ export default function Home() {
             </p>
             <div className="mt-8 flex justify-center md:justify-start">
               <Link
-                to="/login"
+                to="/register"
                 className="px-8 py-3 rounded-full bg-gradient-to-r from-[#2563EB] to-[#38BDF8] text-white font-semibold shadow-lg hover:scale-105 transition-all duration-150"
               >
                 Join now
