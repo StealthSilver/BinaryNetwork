@@ -2,53 +2,53 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col">
-      {/* Navbar */}
-      <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-sm">
-        <h1 className="text-2xl font-bold text-blue-600">LinkedUp</h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#EFF6FF] via-[#DBEAFE] to-white flex flex-col">
+      <nav className="flex justify-between items-center px-8 py-4 bg-[#1E3A8A] rounded-b-2xl shadow-md mx-auto w-full max-w-6xl">
+        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+          LinkedUp
+        </h1>
         <div>
           <Link
             to="/login"
-            className="text-blue-600 font-medium hover:underline"
+            className="text-[#93C5FD] font-semibold px-4 py-2 rounded hover:bg-[#2563EB] hover:text-white transition"
           >
             Sign in
           </Link>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <main className="flex flex-1 flex-col md:flex-row items-center justify-between px-8 md:px-16">
-        {/* Left Content */}
-        <div className="max-w-lg text-center md:text-left">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-            Welcome to your professional community
-          </h2>
-          <p className="mt-4 text-gray-600 text-lg">
-            Connect with colleagues, build your career, and discover new
-            opportunities — all in one place.
-          </p>
-          <div className="mt-6 flex justify-center md:justify-start">
-            <Link
-              to="/login"
-              className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 transition"
-            >
-              Join now
-            </Link>
+      <main className="flex-1 flex items-center justify-center">
+        <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 py-16 gap-16">
+          <div className="max-w-xl text-center md:text-left">
+            <h2 className="text-5xl md:text-6xl font-extrabold text-[#1E3A8A] leading-tight drop-shadow-lg">
+              Welcome to your{" "}
+              <span className="text-[#2563EB]">professional community</span>
+            </h2>
+            <p className="mt-6 text-[#334155] text-lg md:text-xl font-light">
+              Connect with colleagues, build your career, and discover new
+              opportunities — all in one place.
+            </p>
+            <div className="mt-8 flex justify-center md:justify-start">
+              <Link
+                to="/login"
+                className="px-8 py-3 rounded-full bg-gradient-to-r from-[#2563EB] to-[#38BDF8] text-white font-semibold shadow-lg hover:scale-105 transition-all duration-150"
+              >
+                Join now
+              </Link>
+            </div>
           </div>
-        </div>
 
-        {/* Right Content: Illustration */}
-        <div className="mt-10 md:mt-0">
-          <img
-            src="https://illustrations.popsy.co/gray/work-from-home.svg"
-            alt="community"
-            className="w-96 max-w-full"
-          />
+          <div className="w-full max-w-lg flex justify-center">
+            <img
+              src="https://illustrations.popsy.co/gray/work-from-home.svg"
+              alt="community"
+              className="w-full max-w-2xl h-auto rounded-2xl shadow-2xl bg-white p-4"
+            />
+          </div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white shadow-inner py-4 text-center text-gray-500 text-sm">
+      <footer className="bg-[#1E3A8A] rounded-t-2xl py-4 text-center text-white text-base tracking-wide shadow-inner mx-auto w-full max-w-6xl">
         © {new Date().getFullYear()} LinkedUp, Inc.
       </footer>
     </div>
