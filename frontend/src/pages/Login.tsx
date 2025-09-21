@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../config/redux/action/authAction";
 import type { AppDispatch, RootState } from "../config/redux/store";
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, isError, message } = useSelector(
+  const navigate = useNavigate();
+
+  const { isLoading, isError, message, isSuccess } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -16,6 +18,13 @@ export default function Login() {
     e.preventDefault();
     dispatch(loginUser(form));
   };
+
+  // Redirect after login success
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/dashboard");
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white px-4">
