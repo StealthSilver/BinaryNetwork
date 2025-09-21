@@ -10,7 +10,7 @@ export default function Home() {
         <div>
           <Link
             to="/login"
-            className="text-[#93C5FD] font-semibold px-4 py-2 rounded hover:bg-[#2563EB] hover:text-white transition"
+            className="text-[#ffffff] font-semibold px-4 py-2 rounded hover:bg-[#2563EB] hover:text-white transition"
           >
             Sign in
           </Link>
