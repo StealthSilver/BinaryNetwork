@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { registerUser } from "../config/redux/action/authAction";
 import type { AppDispatch, RootState } from "../config/redux/store";
 
@@ -11,7 +12,7 @@ export default function Register() {
 
   const [form, setForm] = useState({
     name: "",
-    username: "",
+    username: "", // ✅ added field
     email: "",
     password: "",
   });
@@ -25,17 +26,13 @@ export default function Register() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <h2 className="text-2xl font-bold text-center text-gray-900">
-          Create your Binary Network account
+          Create your account
         </h2>
-        <p className="mt-2 text-center text-gray-500">
-          Join the community and start connecting today!
-        </p>
-
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
           {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Full Name
+              Name
             </label>
             <input
               type="text"
@@ -43,7 +40,7 @@ export default function Register() {
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               required
               className="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="John Doe"
+              placeholder="Your name"
             />
           </div>
 
@@ -58,14 +55,14 @@ export default function Register() {
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               required
               className="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="johndoe123"
+              placeholder="choose a username"
             />
           </div>
 
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Email address
+              Email
             </label>
             <input
               type="email"
@@ -87,7 +84,6 @@ export default function Register() {
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               required
-              minLength={6}
               className="mt-1 w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               placeholder="••••••••"
             />
@@ -98,7 +94,7 @@ export default function Register() {
             disabled={isLoading}
             className="w-full py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-50"
           >
-            {isLoading ? "Creating account..." : "Join now"}
+            {isLoading ? "Creating account..." : "Register"}
           </button>
         </form>
 
@@ -108,12 +104,12 @@ export default function Register() {
 
         <p className="mt-6 text-center text-gray-600 text-sm">
           Already have an account?{" "}
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="text-blue-600 hover:underline font-medium"
           >
             Sign in
-          </a>
+          </Link>
         </p>
       </div>
     </div>
