@@ -23,7 +23,7 @@ interface RegisterPayload {
 }
 
 interface RegisterResponse {
-  message: string;
+  token: string;
   user: {
     id: string;
     name: string;
@@ -31,29 +31,30 @@ interface RegisterResponse {
   };
 }
 
-// Login Thunk
+// Login
 export const loginUser = createAsyncThunk<
   LoginResponse,
   LoginPayload,
   { rejectValue: { message: string } }
 >("user/login", async (user: LoginPayload, thunkAPI) => {
   try {
-    const response = await clientServer.post<LoginResponse>("/login", user);
+    const response = await clientServer.post<LoginResponse>(
+      "/users/login",
+      user
+    );
 
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-    } else {
-      return thunkAPI.rejectWithValue({ message: "Token not provided" });
-    }
+    if (response.data.token) localStorage.setItem("token", response.data.token);
+    else return thunkAPI.rejectWithValue({ message: "Token not provided" });
 
     return response.data;
   } catch (error: any) {
-    const errMsg = error?.response?.data || { message: "Something went wrong" };
-    return thunkAPI.rejectWithValue(errMsg);
+    return thunkAPI.rejectWithValue(
+      error?.response?.data || { message: "Something went wrong" }
+    );
   }
 });
 
-// Register Thunk
+// Register
 export const registerUser = createAsyncThunk<
   RegisterResponse,
   RegisterPayload,
@@ -61,12 +62,15 @@ export const registerUser = createAsyncThunk<
 >("user/register", async (newUser: RegisterPayload, thunkAPI) => {
   try {
     const response = await clientServer.post<RegisterResponse>(
-      "/register",
+      "/users/register",
       newUser
     );
+
+    if (response.data.token) localStorage.setItem("token", response.data.token);
     return response.data;
   } catch (error: any) {
-    const errMsg = error?.response?.data || { message: "Something went wrong" };
-    return thunkAPI.rejectWithValue(errMsg);
+    return thunkAPI.rejectWithValue(
+      error?.response?.data || { message: "Something went wrong" }
+    );
   }
 });
