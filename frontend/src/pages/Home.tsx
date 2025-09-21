@@ -5,7 +5,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-[#EFF6FF] via-[#DBEAFE] to-white flex flex-col">
       <nav className="flex justify-between items-center px-8 py-4 bg-[#1E3A8A] rounded-b-2xl shadow-md mx-auto w-full max-w-6xl">
         <h1 className="text-3xl font-extrabold tracking-tight text-white">
-          LinkedUp
+          Binary Netwrok
         </h1>
         <div>
           <Link
