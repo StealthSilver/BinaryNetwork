@@ -88,7 +88,7 @@ export default function Navbar() {
                     "https://via.placeholder.com/100"
                   }
                   alt="avatar"
-                  className="w-10 h-10 rounded-full shadow-md"
+                  className="w-8 h-8 rounded-full shadow-md"
                 />
               </Menu.Button>
             </div>
