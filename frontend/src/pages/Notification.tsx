@@ -21,7 +21,7 @@ export default function Notifications() {
     <div className="min-h-screen bg-gray-100 overflow-hidden">
       <Navbar />
 
-      <div className="ml-68 mx-auto py-6 ">
+      <div className="ml-80 mx-auto py-6 ">
         <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-6">
           {/* Left Sidebar */}
           <LeftSidebar posts={[]} />
