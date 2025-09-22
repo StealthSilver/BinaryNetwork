@@ -7,6 +7,9 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import "./styles/App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Network from "./pages/Network";
+import Messages from "./pages/Messages";
+import Notifications from "./pages/Notification";
 
 export default function App() {
   return (
@@ -21,6 +24,33 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/network"
+            element={
+              <ProtectedRoute>
+                <Network />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute>
+                <Messages />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <Notifications />
               </ProtectedRoute>
             }
           />
