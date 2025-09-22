@@ -22,7 +22,7 @@ interface LeftSidebarProps {
   posts: any[];
 }
 
-export default function LeftSidebar({ posts }: LeftSidebarProps) {
+export default function LeftSidebar({}: LeftSidebarProps) {
   const authState = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
