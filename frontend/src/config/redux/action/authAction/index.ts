@@ -48,7 +48,6 @@ export interface GetAboutUserResponse {
   profile: any;
 }
 
-// Login
 export const loginUser = createAsyncThunk<
   LoginResponse,
   LoginPayload,
@@ -71,7 +70,6 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-// Register
 export const registerUser = createAsyncThunk<
   RegisterResponse,
   RegisterPayload,
@@ -92,7 +90,6 @@ export const registerUser = createAsyncThunk<
   }
 });
 
-// Get profile and connections
 export const getAboutUser = createAsyncThunk<
   GetAboutUserResponse,
   GetAboutUserArgs,
@@ -100,8 +97,12 @@ export const getAboutUser = createAsyncThunk<
 >("user/getAboutUser", async ({ token }, thunkAPI) => {
   try {
     const response = await clientServer.get<GetAboutUserResponse>(
-      "/users/get_user_and_profile", // ✅ add /users if backend mounts routes there
-      { params: { token } }
+      "/users/get_user_and_profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ send token in header
+        },
+      }
     );
 
     return response.data;

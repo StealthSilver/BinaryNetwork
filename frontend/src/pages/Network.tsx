@@ -3,7 +3,6 @@ import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 
 export default function Network() {
-  // Dummy network connections
   const connections = Array.from({ length: 12 }, (_, i) => ({
     id: i,
     name: `Connection ${i + 1}`,
@@ -17,10 +16,8 @@ export default function Network() {
 
       <div className="ml-68 mx-auto py-6">
         <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-6">
-          {/* Left Sidebar */}
           <LeftSidebar posts={[]} />
 
-          {/* Center Network Section */}
           <div className="col-span-2 bg-white p-6 rounded-2xl shadow-md flex flex-col">
             <h2 className="text-xl font-bold mb-6 text-gray-800">My Network</h2>
 
@@ -49,7 +46,6 @@ export default function Network() {
             </div>
           </div>
 
-          {/* Right Sidebar */}
           <RightSidebar onCreatePost={() => {}} />
         </div>
       </div>
