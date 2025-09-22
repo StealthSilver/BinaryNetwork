@@ -29,7 +29,6 @@ export default function LeftSidebar({
 
   return (
     <div className="sm:col-span-1 md:col-span-1 space-y-6">
-      {/* User Info */}
       <section className="bg-white shadow rounded-2xl p-4 flex flex-col items-center text-center">
         <img
           src={
@@ -49,7 +48,6 @@ export default function LeftSidebar({
         <p className="text-sm text-gray-500">{authState.user?.email}</p>
       </section>
 
-      {/* Connections & Requests */}
       <section className="grid grid-cols-2 gap-4">
         <div className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
           <span className="text-xl font-bold text-gray-800">
@@ -65,7 +63,6 @@ export default function LeftSidebar({
         </div>
       </section>
 
-      {/* Analytics */}
       <section className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
         <span className="text-xl font-bold text-gray-800">
           {profileViews.toLocaleString()}
@@ -73,7 +70,6 @@ export default function LeftSidebar({
         <span className="text-sm text-gray-500">Profile Views</span>
       </section>
 
-      {/* Quick Access */}
       <section className="bg-white shadow rounded-2xl p-4 space-y-2">
         <h3 className="text-md font-semibold text-gray-700 mb-2">
           Quick Access
