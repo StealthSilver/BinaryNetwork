@@ -7,14 +7,16 @@ import { createPost, type Post } from "../config/redux/action/postAction";
 import type { AsyncThunkAction, AsyncThunkConfig } from "@reduxjs/toolkit";
 
 export default function Dashboard() {
+  const authState = useSelector((state: RootState) => state.auth);
   const dummyPosts = Array.from({ length: 15 }, (_, i) => ({
     id: i,
     name: `User ${i + 1}`,
-    avatar: `https://i.pravatar.cc/50?img=${i + 1}`,
+    avatar: authState.user?.profilePicture
+      ? `/uploads/${authState.user.profilePicture}`
+      : "/favicon.svg",
     description: `This is a sample description for post number ${i + 1}.`,
     image: `https://picsum.photos/600/400?random=${i + 1}`,
   }));
-
   const handleCreatePost = async (
     description: string,
     image: File | null

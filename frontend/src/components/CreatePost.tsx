@@ -1,4 +1,3 @@
-// components/CreatePost.tsx
 import React, { useState, useRef } from "react";
 import Modal from "./Modal";
 import { useSelector } from "react-redux";
@@ -17,7 +16,6 @@ export default function CreatePost({ onPost }: CreatePostProps) {
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // Image upload handlers
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -35,7 +33,6 @@ export default function CreatePost({ onPost }: CreatePostProps) {
 
   const handleRemoveImage = () => setImage(null);
 
-  // Submit handler
   const handleSubmit = async () => {
     if (!description.trim() && !image) return;
     setLoading(true);
@@ -53,14 +50,15 @@ export default function CreatePost({ onPost }: CreatePostProps) {
 
   return (
     <div className="mb-6">
-      {/* Initial Input Box */}
       <div
         onClick={() => setIsModalOpen(true)}
         className="flex items-center gap-3 bg-white p-3 rounded-2xl shadow hover:shadow-md cursor-pointer transition"
       >
         <img
           src={
-            authState.user?.profilePicture || "https://via.placeholder.com/50"
+            authState.user?.profilePicture
+              ? `/uploads/${authState.user.profilePicture}`
+              : "/favicon.svg"
           }
           alt="avatar"
           className="w-10 h-10 rounded-full"
@@ -68,9 +66,7 @@ export default function CreatePost({ onPost }: CreatePostProps) {
         <div className="flex-1 text-gray-500">Start a post...</div>
       </div>
 
-      {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        {/* Top: User Info */}
         <div className="flex items-center gap-3 mb-4">
           <img
             src={
@@ -82,7 +78,6 @@ export default function CreatePost({ onPost }: CreatePostProps) {
           <p className="font-semibold text-gray-800">{authState.user?.name}</p>
         </div>
 
-        {/* Textarea */}
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -91,7 +86,6 @@ export default function CreatePost({ onPost }: CreatePostProps) {
           rows={5}
         />
 
-        {/* Image Upload */}
         <div className="mb-3">
           {image ? (
             <div className="relative inline-block">
@@ -122,7 +116,6 @@ export default function CreatePost({ onPost }: CreatePostProps) {
           )}
         </div>
 
-        {/* Actions */}
         <div className="flex justify-end gap-3">
           <button
             onClick={() => setIsModalOpen(false)}
