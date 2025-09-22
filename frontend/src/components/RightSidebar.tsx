@@ -13,7 +13,6 @@ interface RightSidebarProps {
   onGetPremium?: () => void;
 }
 
-// Dummy news data
 const dummyNews = [
   {
     id: 1,
@@ -81,7 +80,6 @@ export default function RightSidebar({
 
   return (
     <div className="sm:col-span-1 md:col-span-1 bg-white shadow rounded-2xl p-4 space-y-6">
-      {/* Notifications */}
       <section>
         <h3 className="text-md font-semibold text-gray-700 mb-2">
           Notifications
@@ -102,10 +100,9 @@ export default function RightSidebar({
         </ul>
       </section>
 
-      {/* News Feed */}
       <section>
         <h3 className="text-md font-semibold text-gray-700 mb-3">News</h3>
-        {/* Top Stories */}
+
         <div className="space-y-2 mb-3">
           {dummyNews
             .filter((n) => n.topStory)
@@ -123,7 +120,7 @@ export default function RightSidebar({
               </div>
             ))}
         </div>
-        {/* News List */}
+
         <div className="space-y-2">
           {dummyNews
             .filter((n) => !n.topStory)
@@ -143,7 +140,6 @@ export default function RightSidebar({
         </div>
       </section>
 
-      {/* Create Post */}
       <section>
         <h3 className="text-md font-semibold text-gray-700 mb-2">
           Create a Post
@@ -184,7 +180,6 @@ export default function RightSidebar({
         </form>
       </section>
 
-      {/* Get Premium CTA */}
       <section>
         <button
           onClick={onGetPremium}
