@@ -45,14 +45,14 @@ export default function Navbar() {
             <img
               src="/bnbig-logo.svg"
               alt="Binary Network Logo"
-              className="h-10 w-auto"
+              className="h-7 w-auto"
             />
           </div>
           <div className="relative">
             <input
               type="text"
               placeholder="Search..."
-              className="pl-10 pr-4 py-2 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="pl-10 pr-4 py-1 border rounded-2xl border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
           </div>
@@ -73,7 +73,7 @@ export default function Navbar() {
                 )}
                 title={btn.label}
               >
-                <Icon className="w-6 h-6" />
+                <Icon className="w-5 h-5" />
               </button>
             );
           })}
