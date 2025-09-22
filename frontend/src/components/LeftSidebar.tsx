@@ -75,12 +75,11 @@ export default function LeftSidebar({}: LeftSidebarProps) {
           src={
             profile?.userId.profilePicture
               ? `/uploads/${profile.userId.profilePicture}`
-              : "/favicon.svg"
+              : "https://via.placeholder.com/100"
           }
           alt="avatar"
           className="w-20 h-20 rounded-full shadow-md"
         />
-
         <h2
           className="mt-3 text-lg font-semibold text-gray-800 cursor-pointer hover:text-blue-600"
           onClick={() => handleProfileClick(profile?.userId._id || "")}

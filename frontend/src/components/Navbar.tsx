@@ -84,8 +84,9 @@ export default function Navbar() {
               <Menu.Button className="flex items-center focus:outline-none">
                 <img
                   src={
-                    authState.user?.profilePicture ||
-                    "https://via.placeholder.com/100"
+                    authState.user?.profilePicture
+                      ? `/uploads/${authState.user.profilePicture}`
+                      : "/favicon.svg"
                   }
                   alt="avatar"
                   className="w-8 h-8 rounded-full shadow-md"
