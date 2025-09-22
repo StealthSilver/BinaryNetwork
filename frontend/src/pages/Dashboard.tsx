@@ -28,26 +28,23 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="bg-gray-100 ">
+    <div className="bg-gray-100 min-h-screen">
       <Navbar />
 
-      <div className="ml-68 mx-auto py-6 overflow-y-hidden max-h-[93vh]">
-        <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-6">
-          {/* Left Sidebar */}
+      <div className="flex justify-center ml-80 px-6 py-6 overflow-y-hidden max-h-[93vh]">
+        <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-4">
           <LeftSidebar posts={[]} />
 
-          {/* Feed */}
           <div className="col-span-2 bg-white p-4 rounded-2xl shadow-md flex flex-col">
             <h2 className="text-xl font-bold mb-4 text-gray-800">Feed</h2>
             <CreatePost onPost={handleCreatePost} />
-            {/* Scrollable Feed */}
+
             <div className="flex-1 overflow-y-auto space-y-6 max-h-[80vh] pr-2">
               {dummyPosts.map((post) => (
                 <div
                   key={post.id}
                   className="bg-gray-50 rounded-2xl shadow-sm p-4 flex flex-col"
                 >
-                  {/* Top: Avatar + Name + Follow */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <img
@@ -62,17 +59,14 @@ export default function Dashboard() {
                     </button>
                   </div>
 
-                  {/* Description */}
                   <p className="text-gray-700 mb-3">{post.description}</p>
 
-                  {/* Image */}
                   <img
                     src={post.image}
                     alt="post media"
                     className="w-full rounded-2xl object-cover max-h-96 mb-3"
                   />
 
-                  {/* Bottom Actions */}
                   <div className="flex justify-between text-gray-600">
                     <button className="flex items-center gap-1 hover:text-red-600 transition">
                       <Heart className="w-5 h-5" /> Like
@@ -92,7 +86,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Right Sidebar */}
           <RightSidebar onCreatePost={() => {}} />
         </div>
       </div>
