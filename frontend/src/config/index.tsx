@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const clientServer = axios.create({
-  baseURL: "https://binary-network-dshy.vercel.app/",
+  baseURL: "https://binarynetwork-1-i2z7.onrender.com/",
 });
 
 clientServer.interceptors.request.use((config) => {
