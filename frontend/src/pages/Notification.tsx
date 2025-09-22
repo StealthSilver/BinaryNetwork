@@ -1,8 +1,6 @@
-import React from "react";
 import Navbar from "../components/Navbar";
 import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
-import { Bell } from "lucide-react";
 
 export default function Notifications() {
   // Dummy notifications
