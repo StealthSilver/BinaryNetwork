@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const clientServer = axios.create({
-  baseURL: "http://localhost:9090/api",
+  baseURL: "https://binary-network-rzoi.vercel.app/",
 });
 
 clientServer.interceptors.request.use((config) => {
