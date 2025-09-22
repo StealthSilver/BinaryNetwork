@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const clientServer = axios.create({
-  baseURL: "https://binary-network-rzoi.vercel.app/",
+  baseURL:
+    "https://binary-network-dshy-7kixofjld-rajats-projects-caa1cdc1.vercel.app/",
 });
 
 clientServer.interceptors.request.use((config) => {
