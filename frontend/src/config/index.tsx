@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const clientServer = axios.create({
-  baseURL: "https://binarynetwork-1-i2z7.onrender.com/",
+  baseURL: "https://binarynetwork-1-i2z7.onrender.com/api",
 });
 
 clientServer.interceptors.request.use((config) => {
