@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../components/Navbar";
 import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
@@ -100,6 +99,6 @@ export default function Dashboard() {
     </div>
   );
 }
-function dispatch(arg0: AsyncThunkAction<Post, FormData, AsyncThunkConfig>) {
+function dispatch(_arg0: AsyncThunkAction<Post, FormData, AsyncThunkConfig>) {
   throw new Error("Function not implemented.");
 }
