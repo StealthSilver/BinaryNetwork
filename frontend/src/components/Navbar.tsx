@@ -41,10 +41,13 @@ export default function Navbar() {
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <div className="text-2xl font-bold text-blue-600 cursor-pointer">
-            Binary Network
+          <div className="cursor-pointer">
+            <img
+              src="/bnbig-logo.svg"
+              alt="Binary Network Logo"
+              className="h-10 w-auto"
+            />
           </div>
-
           <div className="relative">
             <input
               type="text"
