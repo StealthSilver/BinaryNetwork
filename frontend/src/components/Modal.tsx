@@ -29,7 +29,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
     >
       <div
         className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 relative"
-        onClick={(e) => e.stopPropagation()} // prevent closing modal when clicking inside
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           aria-label="Close"
