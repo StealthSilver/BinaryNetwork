@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../config/redux/store";
 
 interface LeftSidebarProps {
-  posts: any[]; // Replace with your Post type if available
+  posts: any[];
 }
 
 export default function LeftSidebar({ posts }: LeftSidebarProps) {
@@ -10,7 +10,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
 
   return (
     <div className="sm:col-span-1 md:col-span-1 bg-white shadow rounded-2xl p-4 space-y-6">
-      {/* User Profile */}
       <div className="flex flex-col items-center text-center">
         <img
           src={
@@ -25,7 +24,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
         <p className="text-sm text-gray-500">{authState.user?.email}</p>
       </div>
 
-      {/* Connections */}
       <div>
         <h3 className="text-md font-semibold text-gray-700 mb-2">
           Connections
@@ -44,7 +42,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
         </ul>
       </div>
 
-      {/* My Posts */}
       <div>
         <h3 className="text-md font-semibold text-gray-700 mb-2">My Posts</h3>
         <ul className="space-y-2">
