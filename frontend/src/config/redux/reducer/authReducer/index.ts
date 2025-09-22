@@ -1,8 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser, registerUser } from "../../action/authAction";
+import {
+  loginUser,
+  registerUser,
+  getAboutUser,
+  type GetAboutUserResponse,
+} from "../../action/authAction";
 
 interface AuthState {
-  user: any | null;
+  user: GetAboutUserResponse["user"] | null;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -30,23 +35,20 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    handleLoginUser: (state) => {
-      state.message = "hello";
-    },
   },
   extraReducers: (builder) => {
     // Login
     builder
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
-        state.message = "processing...";
+        state.message = "Processing...";
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.loggedIn = true;
-        state.user = action.payload.user;
+        state.user = action.payload.user as any;
         state.message = "Login successful";
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -67,7 +69,7 @@ const authSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.loggedIn = true;
-        state.user = action.payload.user;
+        state.user = action.payload.user as any;
         state.message = "Registration successful";
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -77,8 +79,31 @@ const authSlice = createSlice({
           (action.payload as { message: string })?.message ||
           "Registration failed";
       });
+
+    // Get About User
+    builder
+      .addCase(getAboutUser.pending, (state) => {
+        state.isLoading = true;
+        state.message = "Fetching profile...";
+      })
+      .addCase(getAboutUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.profileFetched = true;
+        state.user = action.payload.user;
+        state.connections = action.payload.user.connections || [];
+        state.connectionRequest = action.payload.user.connectionRequest || [];
+        state.message = "Profile fetched";
+      })
+      .addCase(getAboutUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message =
+          (action.payload as { message: string })?.message ||
+          "Failed to fetch profile";
+      });
   },
 });
 
-export const { reset, handleLoginUser } = authSlice.actions;
+export const { reset } = authSlice.actions;
 export default authSlice.reducer;

@@ -18,7 +18,7 @@ export default function Network() {
       <div className="ml-68 mx-auto py-6">
         <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-6">
           {/* Left Sidebar */}
-          <LeftSidebar />
+          <LeftSidebar posts={[]} />
 
           {/* Center Network Section */}
           <div className="col-span-2 bg-white p-6 rounded-2xl shadow-md flex flex-col">

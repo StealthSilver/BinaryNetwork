@@ -1,39 +1,82 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import type { RootState } from "../config/redux/store";
+import type { RootState, AppDispatch } from "../config/redux/store";
+import { getAboutUser } from "../config/redux/action/authAction";
 
-interface LeftSidebarProps {
-  totalConnections?: number;
-  totalRequests?: number;
-  profileViews?: number;
+interface UserProfile {
+  userId: {
+    _id: string;
+    name: string;
+    email: string;
+    profilePicture?: string;
+  };
+  bio?: string;
+  currentPost?: string;
+  pastWork: any[];
+  education: any[];
+  profileViews: number;
 }
 
-export default function LeftSidebar({
-  totalConnections = 0,
-  totalRequests = 0,
-  profileViews = 0,
-}: LeftSidebarProps) {
+interface LeftSidebarProps {
+  posts: any[];
+}
+
+export default function LeftSidebar({ posts }: LeftSidebarProps) {
   const authState = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [totalConnections, setTotalConnections] = useState(0);
+  const [totalRequests, setTotalRequests] = useState(0);
+
+  // Fetch profile & connection info
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await dispatch(getAboutUser({ token })).unwrap();
+
+        const fetchedProfile: UserProfile = {
+          userId: {
+            _id: response.profile.userId._id,
+            name: response.profile.userId.name,
+            email: response.profile.userId.email,
+            profilePicture: response.profile.userId.profilePicture,
+          },
+          bio: response.profile.bio,
+          currentPost: response.profile.currentPost,
+          pastWork: response.profile.pastWork || [],
+          education: response.profile.education || [],
+          profileViews: response.profile.profileViews || 0,
+        };
+
+        setProfile(fetchedProfile);
+        setTotalConnections(response.user.connections?.length || 0);
+        setTotalRequests(response.user.connectionRequest?.length || 0);
+      } catch (err) {
+        console.error("Failed to fetch user data:", err);
+      }
+    };
+
+    fetchData();
+  }, [authState.loggedIn, dispatch]);
 
   const handleProfileClick = (userId: string) => {
     navigate(`/profile/${userId}`);
   };
 
-  const quickAccessOptions = [
-    { label: "Saved Items", onClick: () => navigate("/saved") },
-    { label: "Groups", onClick: () => navigate("/groups") },
-    { label: "Newsletter", onClick: () => navigate("/newsletter") },
-    { label: "Events", onClick: () => navigate("/events") },
-  ];
-
   return (
-    <div className="sm:col-span-1 md:col-span-1 space-y-6">
-      <section className="bg-white shadow rounded-2xl p-4 flex flex-col items-center text-center">
+    <div className="sm:col-span-1 md:col-span-1 bg-white shadow rounded-2xl p-4 space-y-6">
+      {/* User Info */}
+      <div className="flex flex-col items-center text-center">
         <img
           src={
-            authState.user?.profilePicture
-              ? `/uploads/${authState.user.profilePicture}`
+            profile?.userId.profilePicture
+              ? `/uploads/${profile.userId.profilePicture}`
               : "https://via.placeholder.com/100"
           }
           alt="avatar"
@@ -41,50 +84,44 @@ export default function LeftSidebar({
         />
         <h2
           className="mt-3 text-lg font-semibold text-gray-800 cursor-pointer hover:text-blue-600"
-          onClick={() => handleProfileClick(authState.user?.id)}
+          onClick={() => handleProfileClick(profile?.userId._id || "")}
         >
-          {authState.user?.name}
+          {profile?.userId.name || "Loading..."}
         </h2>
-        <p className="text-sm text-gray-500">{authState.user?.email}</p>
-      </section>
+        <p className="text-sm text-gray-500">{profile?.userId.email}</p>
+      </div>
 
-      <section className="grid grid-cols-2 gap-4">
-        <div className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
-          <span className="text-xl font-bold text-gray-800">
-            {totalConnections.toLocaleString()}
-          </span>
-          <span className="text-sm text-gray-500">Connections</span>
+      {/* Connections / Requests */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-blue-50 p-3 rounded-lg text-center shadow-sm">
+          <p className="text-lg font-bold text-blue-600">{totalConnections}</p>
+          <p className="text-sm text-gray-600">Connections</p>
         </div>
-        <div className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
-          <span className="text-xl font-bold text-gray-800">
-            {totalRequests.toLocaleString()}
-          </span>
-          <span className="text-sm text-gray-500">Requests</span>
+        <div className="bg-green-50 p-3 rounded-lg text-center shadow-sm">
+          <p className="text-lg font-bold text-green-600">{totalRequests}</p>
+          <p className="text-sm text-gray-600">Requests</p>
         </div>
-      </section>
+      </div>
 
-      <section className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
-        <span className="text-xl font-bold text-gray-800">
-          {profileViews.toLocaleString()}
-        </span>
-        <span className="text-sm text-gray-500">Profile Views</span>
-      </section>
+      {/* Analytics */}
+      <div className="bg-yellow-50 p-3 rounded-lg shadow-sm text-center">
+        <p className="text-sm text-gray-600">Profile Views</p>
+        <p className="text-lg font-bold text-yellow-700">
+          {profile?.profileViews || 0}
+        </p>
+      </div>
 
-      <section className="bg-white shadow rounded-2xl p-4 space-y-2">
-        <h3 className="text-md font-semibold text-gray-700 mb-2">
-          Quick Access
-        </h3>
-        {quickAccessOptions.map((option) => (
+      {/* Quick Access */}
+      <div className="bg-gray-50 p-3 rounded-lg shadow-sm space-y-2">
+        {["Saved Items", "Groups", "Newsletter", "Events"].map((item) => (
           <button
-            key={option.label}
-            className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition flex items-center"
-            onClick={option.onClick}
-            aria-label={option.label}
+            key={item}
+            className="w-full text-left px-2 py-1 rounded hover:bg-gray-100 transition-colors cursor-pointer text-gray-700 font-medium"
           >
-            {option.label}
+            {item}
           </button>
         ))}
-      </section>
+      </div>
     </div>
   );
 }

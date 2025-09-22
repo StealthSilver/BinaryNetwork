@@ -35,14 +35,17 @@ interface GetAboutUserArgs {
   token: string;
 }
 
-interface GetAboutUserResponse {
+export interface GetAboutUserResponse {
   user: {
     id: string;
     name: string;
     email: string;
     username: string;
     profilePicture?: string;
+    connections: any[];
+    connectionRequest: any[];
   };
+  profile: any;
 }
 
 // Login
@@ -89,6 +92,7 @@ export const registerUser = createAsyncThunk<
   }
 });
 
+// Get profile and connections
 export const getAboutUser = createAsyncThunk<
   GetAboutUserResponse,
   GetAboutUserArgs,
