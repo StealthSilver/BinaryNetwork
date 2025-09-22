@@ -70,7 +70,9 @@ export default function CreatePost({ onPost }: CreatePostProps) {
         <div className="flex items-center gap-3 mb-4">
           <img
             src={
-              authState.user?.profilePicture || "https://via.placeholder.com/50"
+              authState.user?.profilePicture
+                ? `/uploads/${authState.user.profilePicture}`
+                : "/favicon.svg"
             }
             alt="avatar"
             className="w-12 h-12 rounded-full"
