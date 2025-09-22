@@ -31,6 +31,20 @@ interface RegisterResponse {
   };
 }
 
+interface GetAboutUserArgs {
+  token: string;
+}
+
+interface GetAboutUserResponse {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    username: string;
+    profilePicture?: string;
+  };
+}
+
 // Login
 export const loginUser = createAsyncThunk<
   LoginResponse,
@@ -71,6 +85,27 @@ export const registerUser = createAsyncThunk<
   } catch (error: any) {
     return thunkAPI.rejectWithValue(
       error?.response?.data || { message: "Something went wrong" }
+    );
+  }
+});
+
+export const getAboutUser = createAsyncThunk<
+  GetAboutUserResponse,
+  GetAboutUserArgs,
+  { rejectValue: { message: string } }
+>("user/getAboutUser", async ({ token }, thunkAPI) => {
+  try {
+    const response = await clientServer.get<GetAboutUserResponse>(
+      "/get_user_and_profile",
+      {
+        params: { token },
+      }
+    );
+
+    return response.data;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(
+      error?.response?.data || { message: "Failed to fetch user info" }
     );
   }
 });
