@@ -19,7 +19,6 @@ export default function Login() {
     dispatch(loginUser(form));
   };
 
-  // Redirect after login success
   useEffect(() => {
     if (isSuccess) {
       navigate("/dashboard");

@@ -3,7 +3,6 @@ import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 
 export default function Notifications() {
-  // Dummy notifications
   const notifications = Array.from({ length: 15 }, (_, i) => ({
     id: i,
     type: i % 3 === 0 ? "like" : i % 3 === 1 ? "comment" : "follow",
@@ -23,10 +22,8 @@ export default function Notifications() {
 
       <div className="ml-80 mx-auto py-6 ">
         <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-6">
-          {/* Left Sidebar */}
           <LeftSidebar posts={[]} />
 
-          {/* Center Notifications Section */}
           <div className="col-span-2 bg-white p-6 rounded-2xl shadow-md flex flex-col">
             <h2 className="text-xl font-bold mb-6 text-gray-800">
               Notifications
@@ -56,7 +53,6 @@ export default function Notifications() {
             </div>
           </div>
 
-          {/* Right Sidebar */}
           <RightSidebar onCreatePost={() => {}} />
         </div>
       </div>
