@@ -1,9 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import clientServer from "../../../index";
 
-// ======================
-// Types
-// ======================
 export interface User {
   _id: string;
   name: string;
@@ -30,11 +27,6 @@ export interface Comment {
   createdAt: string;
 }
 
-// ======================
-// Thunks
-// ======================
-
-// 🔹 Get all posts
 export const getAllPosts = createAsyncThunk<Post[]>(
   "post/getAllPosts",
   async (_, thunkAPI) => {
@@ -49,7 +41,6 @@ export const getAllPosts = createAsyncThunk<Post[]>(
   }
 );
 
-// 🔹 Create a new post
 export const createPost = createAsyncThunk<Post, FormData>(
   "post/createPost",
   async (formData, thunkAPI) => {
@@ -70,7 +61,6 @@ export const createPost = createAsyncThunk<Post, FormData>(
   }
 );
 
-// 🔹 Delete a post
 export const deletePost = createAsyncThunk<
   { postId: string; message: string },
   string
@@ -87,7 +77,6 @@ export const deletePost = createAsyncThunk<
   }
 });
 
-// 🔹 Add comment
 export const addComment = createAsyncThunk<
   Comment,
   { postId: string; body: string }
@@ -108,7 +97,6 @@ export const addComment = createAsyncThunk<
   }
 });
 
-// 🔹 Get comments by post
 export const getCommentsByPost = createAsyncThunk<
   { postId: string; comments: Comment[] },
   string
@@ -125,7 +113,6 @@ export const getCommentsByPost = createAsyncThunk<
   }
 });
 
-// 🔹 Like a post
 export const incrementLikes = createAsyncThunk<
   { postId: string; likes: number },
   string

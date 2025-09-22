@@ -42,7 +42,6 @@ const postSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // 🔹 Get All Posts
     builder
       .addCase(getAllPosts.pending, (state) => {
         state.isLoading = true;
@@ -60,7 +59,6 @@ const postSlice = createSlice({
         state.message = action.payload as string;
       });
 
-    // 🔹 Create Post
     builder
       .addCase(createPost.fulfilled, (state, action) => {
         state.posts.unshift(action.payload);
@@ -70,7 +68,6 @@ const postSlice = createSlice({
         state.message = action.payload as string;
       });
 
-    // 🔹 Delete Post
     builder
       .addCase(deletePost.fulfilled, (state, action) => {
         state.posts = state.posts.filter(
@@ -83,7 +80,6 @@ const postSlice = createSlice({
         state.message = action.payload as string;
       });
 
-    // 🔹 Add Comment
     builder
       .addCase(addComment.fulfilled, (state, action) => {
         const comment = action.payload;
@@ -97,7 +93,6 @@ const postSlice = createSlice({
         state.message = action.payload as string;
       });
 
-    // 🔹 Get Comments by Post
     builder
       .addCase(getCommentsByPost.fulfilled, (state, action) => {
         const { postId, comments } = action.payload;
@@ -108,7 +103,6 @@ const postSlice = createSlice({
         state.message = action.payload as string;
       });
 
-    // 🔹 Increment Likes
     builder
       .addCase(incrementLikes.fulfilled, (state, action) => {
         const { postId, likes } = action.payload;
