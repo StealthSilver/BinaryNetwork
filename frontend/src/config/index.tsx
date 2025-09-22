@@ -7,7 +7,6 @@ const clientServer = axios.create({
 clientServer.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 
-  // Ensure headers object exists
   if (!config.headers) {
     config.headers = {};
   }
