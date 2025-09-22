@@ -31,7 +31,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
   const [totalConnections, setTotalConnections] = useState(0);
   const [totalRequests, setTotalRequests] = useState(0);
 
-  // Fetch profile & connection info
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -71,7 +70,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
 
   return (
     <div className="sm:col-span-1 md:col-span-1 bg-white shadow rounded-2xl p-4 space-y-6">
-      {/* User Info */}
       <div className="flex flex-col items-center text-center">
         <img
           src={
@@ -91,7 +89,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
         <p className="text-sm text-gray-500">{profile?.userId.email}</p>
       </div>
 
-      {/* Connections / Requests */}
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-blue-50 p-3 rounded-lg text-center shadow-sm">
           <p className="text-lg font-bold text-blue-600">{totalConnections}</p>
@@ -103,7 +100,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
         </div>
       </div>
 
-      {/* Analytics */}
       <div className="bg-yellow-50 p-3 rounded-lg shadow-sm text-center">
         <p className="text-sm text-gray-600">Profile Views</p>
         <p className="text-lg font-bold text-yellow-700">
@@ -111,7 +107,6 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
         </p>
       </div>
 
-      {/* Quick Access */}
       <div className="bg-gray-50 p-3 rounded-lg shadow-sm space-y-2">
         {["Saved Items", "Groups", "Newsletter", "Events"].map((item) => (
           <button
