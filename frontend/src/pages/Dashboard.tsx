@@ -32,7 +32,7 @@ export default function Dashboard() {
 
       <div className="flex justify-center ml-80 px-6 py-6 overflow-y-hidden max-h-[93vh]">
         <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 gap-4">
-          <LeftSidebar posts={[]} />
+          <LeftSidebar />
 
           <div className="col-span-2 bg-white p-4 rounded-2xl shadow-md flex flex-col">
             <h2 className="text-xl font-bold mb-4 text-gray-800">Feed</h2>
