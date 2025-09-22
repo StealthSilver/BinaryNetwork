@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { RootState, AppDispatch } from "../config/redux/store";
 import { getAllPosts } from "../config/redux/action/postAction/index";
+import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -11,7 +12,6 @@ export default function Dashboard() {
   const authState = useSelector((state: RootState) => state.auth);
   const [isTokenThere, setIsTokenThere] = useState(false);
 
-  // Check if token exists
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -21,7 +21,6 @@ export default function Dashboard() {
     }
   }, [navigate]);
 
-  // Fetch posts if token is there
   useEffect(() => {
     if (isTokenThere) {
       dispatch(getAllPosts());
@@ -33,9 +32,12 @@ export default function Dashboard() {
   }
 
   return (
-    <div>
-      <h1>Hey {authState.user.name} 👋</h1>
-      <p>Welcome back!</p>
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <div className="p-6">
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
+        <p className="mt-2 text-gray-600">Welcome to your feed!</p>
+      </div>
     </div>
   );
 }
