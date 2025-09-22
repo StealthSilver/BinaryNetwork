@@ -5,20 +5,16 @@ import CreatePost from "../components/CreatePost";
 import { Heart, MessageCircle, Repeat, Share2 } from "lucide-react";
 import { createPost, type Post } from "../config/redux/action/postAction";
 import type { AsyncThunkAction, AsyncThunkConfig } from "@reduxjs/toolkit";
-import type { RootState } from "../config/redux/store";
-import { useSelector } from "react-redux";
 
 export default function Dashboard() {
-  const authState = useSelector((state: RootState) => state.auth);
   const dummyPosts = Array.from({ length: 15 }, (_, i) => ({
     id: i,
     name: `User ${i + 1}`,
-    avatar: authState.user?.profilePicture
-      ? `/uploads/${authState.user.profilePicture}`
-      : "/favicon.svg",
+    avatar: `https://i.pravatar.cc/50?img=${i + 1}`,
     description: `This is a sample description for post number ${i + 1}.`,
     image: `https://picsum.photos/600/400?random=${i + 1}`,
   }));
+
   const handleCreatePost = async (
     description: string,
     image: File | null
