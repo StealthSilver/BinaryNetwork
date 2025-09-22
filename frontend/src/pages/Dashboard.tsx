@@ -7,7 +7,6 @@ import { createPost, type Post } from "../config/redux/action/postAction";
 import type { AsyncThunkAction, AsyncThunkConfig } from "@reduxjs/toolkit";
 
 export default function Dashboard() {
-  // Dummy feed posts
   const dummyPosts = Array.from({ length: 15 }, (_, i) => ({
     id: i,
     name: `User ${i + 1}`,
