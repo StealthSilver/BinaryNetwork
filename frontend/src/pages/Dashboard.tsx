@@ -5,6 +5,8 @@ import CreatePost from "../components/CreatePost";
 import { Heart, MessageCircle, Repeat, Share2 } from "lucide-react";
 import { createPost, type Post } from "../config/redux/action/postAction";
 import type { AsyncThunkAction, AsyncThunkConfig } from "@reduxjs/toolkit";
+import type { RootState } from "../config/redux/store";
+import { useSelector } from "react-redux";
 
 export default function Dashboard() {
   const authState = useSelector((state: RootState) => state.auth);
