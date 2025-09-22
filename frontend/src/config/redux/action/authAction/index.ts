@@ -100,10 +100,8 @@ export const getAboutUser = createAsyncThunk<
 >("user/getAboutUser", async ({ token }, thunkAPI) => {
   try {
     const response = await clientServer.get<GetAboutUserResponse>(
-      "/get_user_and_profile",
-      {
-        params: { token },
-      }
+      "/users/get_user_and_profile", // ✅ add /users if backend mounts routes there
+      { params: { token } }
     );
 
     return response.data;
