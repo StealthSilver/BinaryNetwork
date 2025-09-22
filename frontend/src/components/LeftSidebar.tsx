@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import type { RootState } from "../config/redux/store";
 
 interface LeftSidebarProps {
@@ -7,23 +8,35 @@ interface LeftSidebarProps {
 
 export default function LeftSidebar({ posts }: LeftSidebarProps) {
   const authState = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+
+  const handleProfileClick = (userId: string) => {
+    navigate(`/profile/${userId}`);
+  };
 
   return (
     <div className="sm:col-span-1 md:col-span-1 bg-white shadow rounded-2xl p-4 space-y-6">
+      {/* User Info */}
       <div className="flex flex-col items-center text-center">
         <img
           src={
-            authState.user?.profilePicture || "https://via.placeholder.com/100"
+            authState.user?.profilePicture
+              ? `/uploads/${authState.user.profilePicture}`
+              : "https://via.placeholder.com/100"
           }
           alt="avatar"
           className="w-20 h-20 rounded-full shadow-md"
         />
-        <h2 className="mt-3 text-lg font-semibold text-gray-800">
+        <h2
+          className="mt-3 text-lg font-semibold text-gray-800 cursor-pointer hover:text-blue-600"
+          onClick={() => handleProfileClick(authState.user?.id)}
+        >
           {authState.user?.name}
         </h2>
         <p className="text-sm text-gray-500">{authState.user?.email}</p>
       </div>
 
+      {/* Connections */}
       <div>
         <h3 className="text-md font-semibold text-gray-700 mb-2">
           Connections
@@ -42,6 +55,7 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
         </ul>
       </div>
 
+      {/* My Posts */}
       <div>
         <h3 className="text-md font-semibold text-gray-700 mb-2">My Posts</h3>
         <ul className="space-y-2">
