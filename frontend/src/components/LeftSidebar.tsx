@@ -3,10 +3,16 @@ import { useNavigate } from "react-router-dom";
 import type { RootState } from "../config/redux/store";
 
 interface LeftSidebarProps {
-  posts: any[];
+  totalConnections?: number;
+  totalRequests?: number;
+  profileViews?: number;
 }
 
-export default function LeftSidebar({ posts }: LeftSidebarProps) {
+export default function LeftSidebar({
+  totalConnections = 0,
+  totalRequests = 0,
+  profileViews = 0,
+}: LeftSidebarProps) {
   const authState = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
@@ -14,10 +20,17 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
     navigate(`/profile/${userId}`);
   };
 
+  const quickAccessOptions = [
+    { label: "Saved Items", onClick: () => navigate("/saved") },
+    { label: "Groups", onClick: () => navigate("/groups") },
+    { label: "Newsletter", onClick: () => navigate("/newsletter") },
+    { label: "Events", onClick: () => navigate("/events") },
+  ];
+
   return (
-    <div className="sm:col-span-1 md:col-span-1 bg-white shadow rounded-2xl p-4 space-y-6">
+    <div className="sm:col-span-1 md:col-span-1 space-y-6">
       {/* User Info */}
-      <div className="flex flex-col items-center text-center">
+      <section className="bg-white shadow rounded-2xl p-4 flex flex-col items-center text-center">
         <img
           src={
             authState.user?.profilePicture
@@ -34,44 +47,48 @@ export default function LeftSidebar({ posts }: LeftSidebarProps) {
           {authState.user?.name}
         </h2>
         <p className="text-sm text-gray-500">{authState.user?.email}</p>
-      </div>
+      </section>
 
-      {/* Connections */}
-      <div>
+      {/* Connections & Requests */}
+      <section className="grid grid-cols-2 gap-4">
+        <div className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
+          <span className="text-xl font-bold text-gray-800">
+            {totalConnections.toLocaleString()}
+          </span>
+          <span className="text-sm text-gray-500">Connections</span>
+        </div>
+        <div className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
+          <span className="text-xl font-bold text-gray-800">
+            {totalRequests.toLocaleString()}
+          </span>
+          <span className="text-sm text-gray-500">Requests</span>
+        </div>
+      </section>
+
+      {/* Analytics */}
+      <section className="bg-white shadow rounded-2xl p-4 flex flex-col items-center">
+        <span className="text-xl font-bold text-gray-800">
+          {profileViews.toLocaleString()}
+        </span>
+        <span className="text-sm text-gray-500">Profile Views</span>
+      </section>
+
+      {/* Quick Access */}
+      <section className="bg-white shadow rounded-2xl p-4 space-y-2">
         <h3 className="text-md font-semibold text-gray-700 mb-2">
-          Connections
+          Quick Access
         </h3>
-        <ul className="space-y-2">
-          {[1, 2, 3].map((i) => (
-            <li key={i} className="flex items-center space-x-2">
-              <img
-                src={`https://i.pravatar.cc/40?img=${i}`}
-                alt="friend"
-                className="w-8 h-8 rounded-full"
-              />
-              <span className="text-gray-700 text-sm">Friend {i}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* My Posts */}
-      <div>
-        <h3 className="text-md font-semibold text-gray-700 mb-2">My Posts</h3>
-        <ul className="space-y-2">
-          {posts
-            .filter((p) => p.userId._id === authState.user?.id)
-            .slice(0, 3)
-            .map((post) => (
-              <li
-                key={post._id}
-                className="p-2 bg-gray-50 rounded-lg text-sm text-gray-600 truncate"
-              >
-                {post.body}
-              </li>
-            ))}
-        </ul>
-      </div>
+        {quickAccessOptions.map((option) => (
+          <button
+            key={option.label}
+            className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition flex items-center"
+            onClick={option.onClick}
+            aria-label={option.label}
+          >
+            {option.label}
+          </button>
+        ))}
+      </section>
     </div>
   );
 }
