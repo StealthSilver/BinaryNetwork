@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { registerUser } from "../config/redux/action/authAction";
 import type { AppDispatch, RootState } from "../config/redux/store";
 
 export default function Register() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, isError, message } = useSelector(
+  const { isLoading, isError, isSuccess, message } = useSelector(
     (state: RootState) => state.auth
   );
 
@@ -16,6 +16,12 @@ export default function Register() {
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      setForm({ name: "", username: "", email: "", password: "" });
+    }
+  }, [isSuccess]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,6 +102,12 @@ export default function Register() {
 
         {isError && (
           <p className="mt-4 text-center text-red-500 text-sm">{message}</p>
+        )}
+
+        {isSuccess && (
+          <p className="mt-4 text-center text-green-600 text-sm">
+            Registration successful! You can now sign in.
+          </p>
         )}
 
         <p className="mt-6 text-center text-gray-600 text-sm">
