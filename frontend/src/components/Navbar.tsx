@@ -30,7 +30,6 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  // Navigation buttons config
   const navButtons = [
     { icon: Home, label: "Dashboard", path: "/dashboard" },
     { icon: Users, label: "Network", path: "/network" },
@@ -41,14 +40,11 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        {/* Left: Logo + Search */}
         <div className="flex items-center gap-6">
-          {/* Logo */}
           <div className="text-2xl font-bold text-blue-600 cursor-pointer">
             Binary Network
           </div>
 
-          {/* Search Bar */}
           <div className="relative">
             <input
               type="text"
@@ -59,7 +55,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Center: Navigation Icons */}
         <div className="flex items-center gap-6 text-gray-600">
           {navButtons.map((btn) => {
             const Icon = btn.icon;
@@ -81,7 +76,6 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Right: User Menu */}
         <Menu as="div" className="relative">
           <div className="flex gap-4 items-center">
             {authState.user && (
