@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/multer": "^2.0.0"
+    "@types/multer": "^2.0.0",
+    "typescript": "^5.9.2"
   }
 }
